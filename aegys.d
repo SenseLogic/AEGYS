@@ -1,0 +1,357 @@
+/*
+    This file is part of the Aegys distribution.
+
+    https://github.com/SenseLogic/AEGYS
+
+    Copyright (C) 2026 Eric Pelzer (ecstatic.coder@gmail.com)
+
+    Aegys is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, version 3.
+
+    Aegys is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Aegys.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+// -- IMPORTS
+
+import core.stdc.stdlib : exit;
+import std.algorithm : countUntil;
+import std.conv : to;
+import std.file : exists, readText, write;
+import std.path : absolutePath;
+import std.stdio : writeln;
+import std.string : join, replace, split, startsWith, stripRight;
+
+// -- FUNCTIONS
+
+void PrintError(
+    string message
+    )
+{
+    writeln( "*** ERROR : ", message );
+}
+
+// ~~
+
+void Abort(
+    string message
+    )
+{
+    PrintError( message );
+
+    exit( -1 );
+}
+
+// ~~
+
+void Abort(
+    string message,
+    Exception exception
+    )
+{
+    PrintError( message );
+    PrintError( exception.msg );
+
+    exit( -1 );
+}
+
+// ~~
+
+string GetPhysicalPath(
+    string path
+    )
+{
+    version( Windows )
+    {
+        return `\\?\` ~ path.absolutePath.replace( '/', '\\' ).replace( "\\.\\", "\\" );
+    }
+
+    return path;
+}
+
+// ~~
+
+string GetLogicalPath(
+    string path
+    )
+{
+    return path.replace( '\\', '/' );
+}
+
+// ~~
+
+void WriteText(
+    string file_path,
+    string file_text
+    )
+{
+    try
+    {
+        writeln( "Writing file : ", file_path );
+
+        file_path.write( file_text );
+    }
+    catch ( Exception exception )
+    {
+        Abort( "Can't write file : " ~ file_path, exception );
+    }
+}
+
+// ~~
+
+string ReadText(
+    string file_path
+    )
+{
+    string
+        file_text;
+
+    writeln( "Reading file : ", file_path );
+
+    try
+    {
+        file_text = file_path.readText();
+    }
+    catch ( Exception exception )
+    {
+        Abort( "Can't read file : " ~ file_path, exception );
+    }
+
+    return file_text;
+}
+
+// ~~
+
+bool GetVariableExpressionValue(
+    string expression,
+    string[ string ] variable_value_by_name_map
+    )
+{
+    string
+        variable_name,
+        variable_value;
+    string*
+        variable_value_by_name;
+    string[]
+        part_array;
+
+    part_array = expression.split( '=' );
+
+    variable_name = part_array[ 0 ];
+    variable_value = ( part_array.length > 1 ) ? part_array[ 1 ] : "";
+    variable_value_by_name = variable_name in variable_value_by_name_map;
+
+    if ( part_array.length == 1 )
+    {
+        return variable_value_by_name !is null;
+    }
+    else
+    {
+        if ( variable_value_by_name is null )
+        {
+            return false;
+        }
+        else
+        {
+            return *variable_value_by_name == variable_value;
+        }
+    }
+}
+
+// ~~
+
+bool GetBooleanExpressionValue(
+    string expression,
+    string[ string ] variable_value_by_name_map
+    )
+{
+    long
+        valid_sub_condition_count;
+    string[]
+        condition_array,
+        sub_condition_array;
+
+    condition_array = expression.replace( " ", "" ).split( '|' );
+
+    foreach ( condition; condition_array )
+    {
+        sub_condition_array = condition.split( '&' );
+
+        valid_sub_condition_count = 0;
+
+        foreach ( sub_condition; sub_condition_array )
+        {
+            if ( ( !sub_condition.startsWith( '!' )
+                   && GetVariableExpressionValue( sub_condition, variable_value_by_name_map ) )
+                 || ( sub_condition.startsWith( '!' )
+                      && !GetVariableExpressionValue( sub_condition[ 1 .. $ ], variable_value_by_name_map ) ) )
+            {
+                ++valid_sub_condition_count;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if ( valid_sub_condition_count == sub_condition_array.length )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// ~~
+
+string ReplaceVariables(
+    string text,
+    string[ string ] variable_value_by_name_map
+    )
+{
+    foreach ( variable_name, variable_value; variable_value_by_name_map )
+    {
+        text = text.replace( "{" ~ variable_name ~ "}", variable_value );
+    }
+
+    return text;
+}
+
+// ~~
+
+string[ string ] GetVariableValueByNameMap(
+    string source_file_configuration
+    )
+{
+    string
+        variable_name,
+        variable_value;
+    string[]
+        part_array,
+        variable_definition_array;
+    string[ string ]
+        variable_value_by_name_map;
+
+    variable_definition_array = source_file_configuration.split( ' ' );
+
+    foreach ( variable_definition; variable_definition_array )
+    {
+        part_array = variable_definition.split( '=' );
+
+        variable_name = part_array[ 0 ];
+        variable_value = ( part_array.length > 1 ) ? part_array[ 1 ] : "";
+        variable_value_by_name_map[ variable_name ] = variable_value;
+    }
+
+    return variable_value_by_name_map;
+}
+
+// ~~
+
+string GetProcessedFileText(
+    string source_file_path,
+    string source_file_configuration
+    )
+{
+    bool
+        source_line_is_kept;
+    long
+        source_line_index;
+    string
+        source_line,
+        source_file_text;
+    string[]
+        processed_line_array,
+        source_line_array;
+    string[ string ]
+        variable_value_by_name_map;
+
+    variable_value_by_name_map = GetVariableValueByNameMap( source_file_configuration );
+
+    source_file_text = source_file_path.ReadText();
+    source_line_array = source_file_text.replace( "\r", "" ).split( '\n' );
+
+    for ( source_line_index = 0;
+          source_line_index < source_line_array.length;
+          ++source_line_index )
+    {
+        source_line_array[ source_line_index ] = source_line_array[ source_line_index ].stripRight();
+    }
+
+    source_file_text = "";
+    source_line_is_kept = true;
+
+    for ( source_line_index = 0;
+          source_line_index < source_line_array.length;
+          ++source_line_index )
+    {
+        source_line = source_line_array[ source_line_index ];
+
+        if ( source_line == "%%" )
+        {
+            source_line_is_kept = true;
+        }
+        else if ( source_line.startsWith( "%% " ) )
+        {
+            source_line_is_kept = source_line[ 3 .. $ ].GetBooleanExpressionValue( variable_value_by_name_map );
+        }
+        else
+        {
+            if ( source_line_is_kept )
+            {
+                processed_line_array ~= source_line.ReplaceVariables( variable_value_by_name_map );
+            }
+        }
+    }
+
+    return processed_line_array.join( '\n' );
+}
+
+// ~~
+
+void main(
+    string[] argument_array
+    )
+{
+    long
+        argument_count;
+    string
+        processed_file_text;
+
+    argument_array = argument_array[ 1 .. $ ];
+    argument_count = argument_array.length;
+
+    if ( argument_count >= 3
+         && argument_count & 1 )
+    {
+        while ( argument_array.length >= 2 )
+        {
+            processed_file_text
+                ~= GetProcessedFileText(
+                       argument_array[ 0 ].GetLogicalPath(),
+                       argument_array[ 1 ]
+                       );
+
+            argument_array = argument_array[ 2 .. $ ];
+        }
+
+        WriteText(
+            argument_array[ 0 ].GetLogicalPath(),
+            processed_file_text
+            );
+    }
+    else
+    {
+        writeln( "Usage :" );
+        writeln( "    aegys <source_file_path> <source_file_configuration> [<source_file_path> <source_file_configuration> ...] <target_file_path>" );
+
+        PrintError( "Invalid arguments : " ~ argument_array.to!string() );
+    }
+}

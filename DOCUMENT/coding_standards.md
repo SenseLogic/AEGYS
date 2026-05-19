@@ -1,0 +1,1977 @@
+%%
+# {language} Coding Standards
+
+Every single line of {language} source code of this codebase must strictly adhere to the following rules, without any exception:
+
+- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to {language}, HTML, CSS and any other code of this project.
+- Self-documenting code only (prefer descriptive names over explanatory comments).
+- Prefer explicit and readable code over compact code.
+- Identifiers follow usual English ordering rules (`FirstPointCloudIndex`, `ConfigurationFilePath`, `PointCloudFolderPath`) and use no shortened words, abbreviations (except `Url`) or single-letter names (except for axis names in 3D vectors).
+- No plural-form identifiers.
+- Aligned braces (Allman style) and keep the opening and closing braces always alone on their own line.
+- Each function parameter definition must be on its own line with the closing `)` of the parameter list starting its own line.
+- When an arrow function definition spans multiple lines, the arrow `=>` must end its own line, and the function code must be indented on the next line(s).
+- When a `return` statement spans multiple lines, the `return` keyword must end its own line, and the return expression value must be indented on the next line(s).
+- When the field value after `:` spans multiple lines, the `:` must end its own line, and the field value must be indented on the next line(s).
+- When an opening `(` ends its own line, the matching closing `)` must start its own line and be aligned with the first character of the indented argument block.
+- When an opening `[` ends its own line, the matching closing `]` must start its own line and be aligned with the first character of the indented element block.
+- In multiline boolean expressions, put `&&` and `||` at the start of the continued line, aligned with the first character of its first left operand.
+- In multiline arithmetic expressions, put the operator (`+`, etc) at the start of the continued line, aligned with the first character of its first left operand.
+- When an assignment spans multiple lines, the assignment operator (`=`, `+=`, etc) must be indented on the next line and start the first line of the right-hand side value.
+- For non-empty `()` and `[]`, add spaces inside delimiters: `xxxxx( 10, xxxxx[ 10 ] )`. Keep empty pairs compact: `xxxxx()`, `xxxxx[]`.
+- Arrow functions can only be used for getters, field values and call arguments. They can't be used to define the constructors and methods of a class.
+- Use standard section comments:
+  - `// -- IMPORTS`
+  - `// -- CONSTANTS`
+  - `// -- TYPES`
+  - `// -- ATTRIBUTES`
+  - `// -- CONSTRUCTORS`
+  - `// -- OPERATORS`
+  - `// -- INQUIRIES` (for methods not changing the type data)
+  - `// -- OPERATIONS` (for methods changing the type data)
+  - `// -- VARIABLES` (for global variables)
+  - `// -- FUNCTIONS` (for global functions)
+  - `// -- STATEMENTS` (for global statements)
+- Standard section comments must only be present for non-empty sections.
+- Insert a standard separating comment `// ~~` between types, methods or functions defined within the same standard section.
+- Keep an empty line before and after any of those `// -- ...' and `// ~~` standard section and separating comments, unless the standard comment is at the start of a file or `{` block.
+- Keep an empty line before and after a multiline call or assignment, unless it is after the opening `{` of a block or before the closing `}` of a block.
+- Try to define the code inside sections following the same order as the above section comments, and within those sections, define constants, types, attributes, methods etc before the other elements of code that are using them (i.e. having the used code defined before the code that uses it, allowing for single-read full code understanding).
+%% language=C#
+- Use `List` or `Dictionary` suffixes matching the collection type (`ProductList`, `ProductByIdDictionary`, `productList`, `productByIdDictionary`).
+- Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
+- Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
+- Use `PascalCase` for namespaces, types, attributes, methods, functions, properties, events, enum members, and public constants.
+- Use `_camelCase` for private fields.
+- Use `camelCase` for parameters and local variables.
+- Blank line before `return`, `if`, `for`, `while`, `foreach`, `switch`, `try`, `catch`, `finally`, `lock`, `do`, and `else` when the previous non-empty line does not end with `{`.
+%% language=D
+- Use `Array` or `Map` suffixes matching the collection type (`ProductArray`, `ProductByIdMap`, `productArray`, `productByIdMap`).
+- Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
+- Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
+- Use `PascalCase` for types, templates, interfaces, enums, and attributes.
+- Use `camelCase` for methods, functions, parameters, local variables, and enum members.
+- Use `lowercase` (and `lowercase_with_underscores` when a name has multiple words) for modules, packages, and source files.
+- Blank line before `return`, `if`, `for`, `while`, `foreach`, `switch`, `try`, `catch`, `finally`, `synchronized`, `do`, and `else` when the previous non-empty line does not end with `{`.
+%% language=Dart
+- Use `List` or `Map` suffixes matching the collection type (`ProductList`, `productList`, `ProductByIdMap`, `productByIdMap`).
+- Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
+- Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
+- Use `UpperCamelCase` for types, annotations, constructors, and type parameters.
+- Use `lowerCamelCase` for methods, functions, parameters, locals, fields, and enum values.
+- Use `lowercase_with_underscores` for libraries, packages, directories, source files, and import prefixes.
+- Blank line before `return`, `if`, `for`, `while`, `for-in`, `switch`, `try`, `catch`, `finally`, and `else` when the previous non-empty line does not end with `{`.
+%% language=JavaScript
+- Use `Array` or `Map` suffixes matching the collection type (`ProductArray`, `ProductByIdMap`, `productArray`, `productByIdMap`).
+- Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
+- Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
+- Use `PascalCase` for classes, constructors, and public constants at module scope.
+- Use `camelCase` for methods, functions, parameters, local variables, object properties, and enum-like members on constant objects.
+- Blank line before `return`, `if`, `for`, `while`, `for-in`, `for-of`, `switch`, `try`, `catch`, `finally`, `do`, and `else` when the previous non-empty line does not end with `{`.
+%% language=Python
+- Use `List` or `Map` suffixes matching the collection type (`ProductList`, `ProductByIdMap`, `productList`, `productByIdMap`).
+- Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
+- Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
+- Use `PascalCase` for classes and type names.
+- Use `snake_case` for methods, functions, parameters, local variables, attributes, modules, packages, and source files.
+- Use `SCREAMING_SNAKE_CASE` for constants.
+- Use `# -- ...` and `# ~~` for standard section and separating comments (not `//`).
+- In multiline boolean expressions, put `and` and `or` at the start of the continued line, aligned with the first character of its first left operand.
+- Lambdas can only be used for call arguments. They can't be used to define class methods.
+- After a multiline condition, put the closing `)` on its own line and start the block with `:` on the next line.
+- Blank line before `return`, `if`, `for`, `while`, `try`, `except`, `finally`, `elif`, and `else` when the previous non-empty line does not end with `:`.
+- Blank line before and after `def`, `if`, `elif`, `else`, `for`, `while`, `try`, `except`, `finally`, ` with`, `class`, `match`, and `case`.
+- `;` after all other statements not ending with `:`.
+- No space before `;` or `:`.
+%% language=Rust
+- Use `vector` or `map` suffixes matching the collection type (`product_vector`, `product_by_id_map`).
+- Use the `index` suffix for element indices (`product_index`).
+- Use the `count` suffix for element counts (`product_count`).
+- Use `UpperCamelCase` for types, traits, and enum variants.
+- Use `snake_case` for crates, modules, functions, methods, variables, parameters, fields, and macros
+- Use `SCREAMING_SNAKE_CASE` for constants and statics.
+- Blank line before `return`, `if`, `for`, `while`, `loop`, `match`, and `else` when the previous non-empty line does not end with `{`.
+%%
+- No trailing commas in any comma-separated construct.
+%%
+- Use structured positive-branch control flow:
+  - Keep the main execution path inside the positive branch of conditions.
+  - Place early exit statements (`return`, `break`, `continue`, `throw`, etc.) inside the negative branch (`else`) whenever the conditional also contains the main execution path.
+  - Avoid inverted guard conditions that move the primary logic outside the conditional structure.
+%% language=C# | language=D | language=Dart | language=JavaScript | language=Rust | language=TypeScript
+  Always prefer:
+```
+if ( someCondition )
+{
+    for ( someLoop )
+    {
+        if ( someCondition )
+        {
+            doSomething();
+        }
+        else
+        {
+            break;
+        }
+    }
+}
+```
+  Instead of:
+```
+if ( !someCondition )
+{
+    return;
+}
+
+for ( someLoop )
+{
+    if ( !someCondition )
+    {
+        break;
+    }
+
+    doSomething();
+}
+```
+%% greenfield
+- Don't add any legacy data compatibility code to the codebase when some data structures change. As this project is still not deployed in production, the code and data must remain perfecly in sync.
+%%
+
+Those rules must be treated as a hard rule system, not stylistic preference.
+
+Here is sample {language} code illustrating those rules:
+
+%% language=C#
+```csharp
+// -- IMPORTS
+
+using System;
+using System.Collections.Generic;
+
+// -- CONSTANTS
+
+public static class SampleConstants
+{
+    public const int
+        MinimumPassCount = 0,
+        MaximumPassCount = 5;
+}
+
+// -- TYPES
+
+public class Being
+{
+    // -- ATTRIBUTES
+
+    public string
+        Name;
+    public int
+        Age;
+
+    // -- CONSTRUCTORS
+
+    public Being(
+        string name,
+        int age
+        )
+    {
+        Name = name;
+        Age = age;
+    }
+}
+
+// ~~
+
+public class Person
+    : Being
+{
+    // -- ATTRIBUTES
+
+    public double
+        Weight,
+        DogCount;
+
+    // -- CONSTRUCTORS
+
+    public Person(
+        string name,
+        int age,
+        double weight,
+        double dogCount
+        )
+        : base( name, age )
+    {
+        Weight = weight;
+        DogCount = dogCount;
+    }
+
+    // -- INQUIRIES
+
+    public int GetAge(
+        )
+    {
+        return Age;
+    }
+
+    // ~~
+
+    public int GetAgeOffset(
+        int otherAge
+        )
+    {
+        return otherAge - Age;
+    }
+
+    // ~~
+
+    public string GetHelloMessage(
+        )
+    {
+        return $"Hello, my name is { Name }, I'm { Age } years old and I weight { Weight } kilograms.";
+    }
+
+    // -- OPERATIONS
+
+    public void SetAge(
+        int age
+        )
+    {
+        Age = age;
+    }
+
+    // ~~
+
+    public void SetFakeAge(
+        int age
+        )
+    {
+        if ( age > 0
+             && age < 50
+             && ( age < 20
+                  || age > 40 ) )
+        {
+            Age
+                += ( age
+                     + ( age - 2 )
+                     + ( age
+                         * ( age + 10 )
+                         * ( age + 20 ) ) )
+                   + GetAgeOffset(
+                         age * 2
+                         - 20
+                         );
+        }
+        else if ( age > 20
+                  && age < 40
+                  && ( age < 25
+                       || age > 35 ) )
+        {
+            Age = (int)Math.Round( age * 0.5, MidpointRounding.AwayFromZero );
+        }
+        else
+        {
+            Age = age + 10;
+        }
+    }
+}
+
+// -- FUNCTIONS
+
+public static class SampleFunctions
+{
+    public static Dictionary<string, int>? GetAgeInterval(
+        List<Person> sortedPersonList
+        )
+    {
+        if ( sortedPersonList.Count == 0 )
+        {
+            return null;
+        }
+        else
+        {
+            return new Dictionary<string, int>
+            {
+                { "firstAge", sortedPersonList[ 0 ].Age },
+                { "lastAge", sortedPersonList[ sortedPersonList.Count - 1 ].Age }
+            };
+        }
+    }
+}
+
+// ~~
+
+public static class Program
+{
+    public static void Main(
+        )
+    {
+        var passIndex = 0;
+
+        while ( passIndex < 5 )
+        {
+            ++passIndex;
+        }
+
+        do
+        {
+            ++passIndex;
+        }
+        while ( passIndex < 10 );
+
+        var personList
+            = new List<Person>
+            {
+                new Person( "Mike", 49, 85, 1 ),
+                new Person( "Luke", 30, 77, 0 ),
+                new Person( "John", 30, 72, 3 )
+            };
+
+        personList.Sort(
+            ( firstPerson, secondPerson ) =>
+            {
+                try
+                {
+                    if ( firstPerson.Age != secondPerson.Age )
+                    {
+                        return firstPerson.Age - secondPerson.Age;
+                    }
+                    else
+                    {
+                        return firstPerson.Weight.CompareTo( secondPerson.Weight );
+                    }
+                }
+                catch ( Exception error )
+                {
+                    Console.WriteLine( error.ToString() );
+                }
+
+                return 0;
+            }
+            );
+
+        var ageInterval = SampleFunctions.GetAgeInterval( personList );
+
+        if ( ageInterval != null )
+        {
+            Console.WriteLine( $"First age: { ageInterval[ "firstAge" ] }" );
+            Console.WriteLine( $"Last age: { ageInterval[ "lastAge" ] }" );
+        }
+        else
+        {
+            Console.WriteLine( "No age interval" );
+        }
+    }
+}
+```
+%% language=D
+```d
+// -- IMPORTS
+
+import std.algorithm;
+import std.conv;
+import std.exception;
+import std.stdio;
+import std.typecons;
+
+// -- CONSTANTS
+
+enum int
+    minimumPassCount = 0,
+    maximumPassCount = 5;
+
+// -- TYPES
+
+class Being
+{
+    // -- ATTRIBUTES
+
+    string
+        name;
+    int
+        age;
+
+    // -- CONSTRUCTORS
+
+    this(
+        string name,
+        int age
+        )
+    {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+// ~~
+
+class Person
+    : Being
+{
+    // -- ATTRIBUTES
+
+    double
+        weight,
+        dogCount;
+
+    // -- CONSTRUCTORS
+
+    this(
+        string name,
+        int age,
+        double weight,
+        double dogCount
+        )
+    {
+        super( name, age );
+        this.weight = weight;
+        this.dogCount = dogCount;
+    }
+
+    // -- INQUIRIES
+
+    int getAge(
+        )
+    {
+        return age;
+    }
+
+    // ~~
+
+    int getAgeOffset(
+        int otherAge
+        )
+    {
+        return otherAge - age;
+    }
+
+    // ~~
+
+    string getHelloMessage(
+        )
+    {
+        return "Hello, my name is %s, I'm %s years old and I weight %s kilograms."
+            .format( name, age, weight );
+    }
+
+    // -- OPERATIONS
+
+    void setAge(
+        int age
+        )
+    {
+        this.age = age;
+    }
+
+    // ~~
+
+    void setFakeAge(
+        int age
+        )
+    {
+        if ( age > 0
+             && age < 50
+             && ( age < 20
+                  || age > 40 ) )
+        {
+            this.age
+                += ( age
+                     + ( age - 2 )
+                     + ( age
+                         * ( age + 10 )
+                         * ( age + 20 ) ) )
+                   + this.getAgeOffset(
+                         age * 2
+                         - 20
+                         );
+        }
+        else if ( age > 20
+                  && age < 40
+                  && ( age < 25
+                       || age > 35 ) )
+        {
+            this.age = cast( int )( age * 0.5 + 0.5 );
+        }
+        else
+        {
+            this.age = age + 10;
+        }
+    }
+}
+
+// -- FUNCTIONS
+
+Nullable!( int[ string ] ) getAgeInterval(
+    Person[] sortedPersonArray
+    )
+{
+    if ( sortedPersonArray.length == 0 )
+    {
+        return Nullable!( int[ string ] ).init;
+    }
+    else
+    {
+        int[ string ] ageInterval
+            = [
+                "firstAge": sortedPersonArray[ 0 ].age,
+                "lastAge": sortedPersonArray[ sortedPersonArray.length - 1 ].age
+            ];
+
+        return Nullable!( int[ string ] )( ageInterval );
+    }
+}
+
+// ~~
+
+void main(
+    )
+{
+    auto passIndex = 0;
+
+    while ( passIndex < 5 )
+    {
+        ++passIndex;
+    }
+
+    do
+    {
+        ++passIndex;
+    }
+    while ( passIndex < 10 );
+
+    Person[] personArray
+        = [
+            new Person( "Mike", 49, 85, 1 ),
+            new Person( "Luke", 30, 77, 0 ),
+            new Person( "John", 30, 72, 3 )
+        ];
+
+    personArray.sort!(
+        ( firstPerson, secondPerson )
+        {
+            try
+            {
+                if ( firstPerson.age != secondPerson.age )
+                {
+                    return firstPerson.age < secondPerson.age;
+                }
+                else
+                {
+                    return firstPerson.weight < secondPerson.weight;
+                }
+            }
+            catch ( Exception error )
+            {
+                writeln( error.toString() );
+            }
+
+            return false;
+        }
+        )();
+
+    auto ageInterval = getAgeInterval( personArray );
+
+    if ( !ageInterval.isNull )
+    {
+        writeln( "First age: ", ageInterval.get[ "firstAge" ] );
+        writeln( "Last age: ", ageInterval.get[ "lastAge" ] );
+    }
+    else
+    {
+        writeln( "No age interval" );
+    }
+}
+```
+%% language=Dart
+```dart
+// -- IMPORTS
+
+import 'dart:core';
+
+// -- CONSTANTS
+
+const int
+    minimumPassCount = 0,
+    maximumPassCount = 5;
+
+// -- TYPES
+
+class Being
+{
+    // -- ATTRIBUTES
+
+    String
+        name;
+    int
+        age;
+
+    // -- CONSTRUCTORS
+
+    Being(
+        this.name,
+        this.age
+        );
+}
+
+// ~~
+
+class Person
+    extends Being
+{
+    // -- ATTRIBUTES
+
+    double
+        weight,
+        dogCount;
+
+    // -- CONSTRUCTORS
+
+    Person(
+        String name,
+        int age,
+        this.weight,
+        this.dogCount
+        ) : super( name, age );
+
+    // -- INQUIRIES
+
+    int getAge(
+        )
+    {
+        return age;
+    }
+
+    // ~~
+
+    int getAgeOffset(
+        int otherAge
+        )
+    {
+        return otherAge - age;
+    }
+
+    // ~~
+
+    String getHelloMessage(
+        )
+    {
+        return 'Hello, my name is ${ name }, I\'m ${ age } years old and I weight ${ weight } kilograms.';
+    }
+
+    // -- OPERATIONS
+
+    void setAge(
+        int age
+        )
+    {
+        this.age = age;
+    }
+
+    // ~~
+
+    void setFakeAge(
+        int age
+        )
+    {
+        if ( age > 0
+             && age < 50
+             && ( age < 20
+                  || age > 40 ) )
+        {
+            this.age
+                += ( age
+                     + ( age - 2 )
+                     + ( age
+                         * ( age + 10 )
+                         * ( age + 20 ) ) )
+                   + this.getAgeOffset(
+                         age * 2
+                         - 20
+                         );
+        }
+        else if ( age > 20
+                  && age < 40
+                  && ( age < 25
+                       || age > 35 ) )
+        {
+            this.age = ( age * 0.5 ).round();
+        }
+        else
+        {
+            this.age = age + 10;
+        }
+    }
+}
+
+// -- FUNCTIONS
+
+Map<String, int>? getAgeInterval(
+    List<Person> sortedPersonList
+    )
+{
+    if ( sortedPersonList.isEmpty )
+    {
+        return null;
+    }
+    else
+    {
+        return
+            {
+                'firstAge': sortedPersonList[ 0 ].age,
+                'lastAge': sortedPersonList[ sortedPersonList.length - 1 ].age
+            };
+    }
+}
+
+// ~~
+
+void main(
+    )
+{
+    var passIndex = 0;
+
+    while ( passIndex < 5 )
+    {
+        ++passIndex;
+    }
+
+    do
+    {
+        ++passIndex;
+    }
+    while ( passIndex < 10 );
+
+    var personList
+        = [
+            Person( 'Mike', 49, 85, 1 ),
+            Person( 'Luke', 30, 77, 0 ),
+            Person( 'John', 30, 72, 3 )
+        ];
+
+    personList.sort(
+        ( firstPerson, secondPerson )
+        {
+            try
+            {
+                if ( firstPerson.age != secondPerson.age )
+                {
+                    return firstPerson.age - secondPerson.age;
+                }
+                else
+                {
+                    return firstPerson.weight.compareTo( secondPerson.weight );
+                }
+            }
+            catch ( error )
+            {
+                print( error.toString() );
+            }
+
+            return 0;
+        }
+        );
+
+    var ageInterval = getAgeInterval( personList );
+
+    if ( ageInterval != null )
+    {
+        print( 'First age: ${ ageInterval[ 'firstAge' ] }' );
+        print( 'Last age: ${ ageInterval[ 'lastAge' ] }' );
+    }
+    else
+    {
+        print( 'No age interval' );
+    }
+}
+```
+
+```dart
+// -- IMPORTS
+
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+
+// -- TYPES
+
+class SampleState
+{
+    // -- ATTRIBUTES
+
+    final bool
+        isBusy;
+
+    // -- CONSTRUCTORS
+
+    const SampleState(
+        {
+            this.isBusy = false
+        }
+        );
+}
+
+// ~~
+
+class SampleCubit
+    extends Cubit<SampleState>
+{
+    // -- CONSTRUCTORS
+
+    SampleCubit(
+        ) : super( const SampleState() );
+
+    // -- OPERATIONS
+
+    void send()
+    {
+    }
+}
+
+// ~~
+
+class SampleWidget
+    extends StatelessWidget
+{
+    // -- ATTRIBUTES
+
+    final String
+        message;
+
+    // -- CONSTRUCTORS
+
+    const SampleWidget(
+        {
+            super.key,
+            required this.message
+        }
+        );
+
+    // -- OPERATIONS
+
+    Future<String> getMessage(
+        ) async
+    {
+        final response
+            = await http
+                  .get(
+                      Uri.parse( 'https://sample.com/message' ),
+                      headers:
+                          {
+                              'Accept': 'application/json'
+                          }
+                      )
+                  .timeout( const Duration( seconds: 5 ) );
+
+        if ( response.statusCode != 200 )
+        {
+            throw Exception( 'Request failed: HTTP ${response.statusCode}' );
+        }
+
+        final decodedJson
+            = jsonDecode( response.body ) as Map<String, dynamic>;
+
+        return
+            decodedJson[ 'message' ] as String;
+    }
+
+    // ~~
+
+    @override
+    Widget build(
+        BuildContext context
+        )
+    {
+        return BlocBuilder<SampleCubit, SampleState>(
+            builder:
+                ( BuildContext context, SampleState state )
+                {
+                    return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children:
+                            [
+                                TextButton(
+                                    onPressed:
+                                        () =>
+                                            debugPrint(
+                                                'Message button pressed: $message',
+                                                ),
+                                    child:
+                                        Text(
+                                            message,
+                                            style: Theme.of( context ).textTheme.labelLarge
+                                            )
+                                    ),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children:
+                                        [
+                                            TextButton(
+                                                onPressed: state.isBusy ? null : () => Navigator.of( context ).pop( false ),
+                                                child: const Text( 'Cancel' )
+                                                ),
+                                            const SizedBox( width: 12 ),
+                                            FilledButton(
+                                                onPressed:
+                                                    state.isBusy
+                                                    ? null
+                                                    : () => context.read<SampleCubit>().send(),
+                                                child:
+                                                    state.isBusy
+                                                    ? const SizedBox(
+                                                        width: 20,
+                                                        height: 20,
+                                                        child: CircularProgressIndicator( strokeWidth: 2 )
+                                                        )
+                                                    : const Text( 'Send' )
+                                                )
+                                        ]
+                                    )
+                            ]
+                        );
+                }
+            );
+    }
+}
+
+// -- FUNCTIONS
+
+void main(
+    )
+{
+    runApp(
+        MaterialApp(
+            home:
+                Scaffold(
+                    body:
+                        Center(
+                            child:
+                                BlocProvider(
+                                    create: ( _ ) => SampleCubit(),
+                                    child: const SampleWidget( message: 'Hello' )
+                                    )
+                            )
+                    )
+            )
+        );
+}
+```
+%% language=JavaScript
+```javascript
+// -- CONSTANTS
+
+const
+    minimumPassCount = 0,
+    maximumPassCount = 5;
+
+// -- TYPES
+
+class Being
+{
+    // -- CONSTRUCTORS
+
+    constructor(
+        name,
+        age
+        )
+    {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+// ~~
+
+class Person
+    extends Being
+{
+    // -- CONSTRUCTORS
+
+    constructor(
+        name,
+        age,
+        weight,
+        dogCount
+        )
+    {
+        super( name, age );
+        this.weight = weight;
+        this.dogCount = dogCount;
+    }
+
+    // -- INQUIRIES
+
+    getAge(
+        )
+    {
+        return this.age;
+    }
+
+    // ~~
+
+    getAgeOffset(
+        otherAge
+        )
+    {
+        return otherAge - this.age;
+    }
+
+    // ~~
+
+    getHelloMessage(
+        )
+    {
+        return `Hello, my name is ${ this.name }, I'm ${ this.age } years old and I weight ${ this.weight } kilograms.`;
+    }
+
+    // -- OPERATIONS
+
+    setAge(
+        age
+        )
+    {
+        this.age = age;
+    }
+
+    // ~~
+
+    setFakeAge(
+        age
+        )
+    {
+        if ( age > 0
+             && age < 50
+             && ( age < 20
+                  || age > 40 ) )
+        {
+            this.age
+                += ( age
+                     + ( age - 2 )
+                     + ( age
+                         * ( age + 10 )
+                         * ( age + 20 ) ) )
+                   + this.getAgeOffset(
+                         age * 2
+                         - 20
+                         );
+        }
+        else if ( age > 20
+                  && age < 40
+                  && ( age < 25
+                       || age > 35 ) )
+        {
+            this.age = Math.round( age * 0.5 );
+        }
+        else
+        {
+            this.age = age + 10;
+        }
+    }
+}
+
+// -- FUNCTIONS
+
+function getAgeInterval(
+    sortedPersonArray
+    )
+{
+    if ( sortedPersonArray.length === 0 )
+    {
+        return null;
+    }
+    else
+    {
+        return (
+            {
+                firstAge: sortedPersonArray[ 0 ].age,
+                lastAge: sortedPersonArray[ sortedPersonArray.length - 1 ].age
+            }
+            );
+    }
+}
+
+// ~~
+
+function main(
+    )
+{
+    let passIndex = 0;
+
+    while ( passIndex < 5 )
+    {
+        ++passIndex;
+    }
+
+    do
+    {
+        ++passIndex;
+    }
+    while ( passIndex < 10 );
+
+    let personArray
+        = [
+            new Person( 'Mike', 49, 85, 1 ),
+            new Person( 'Luke', 30, 77, 0 ),
+            new Person( 'John', 30, 72, 3 )
+        ];
+
+    personArray.sort(
+        ( firstPerson, secondPerson ) =>
+        {
+            try
+            {
+                if ( firstPerson.age !== secondPerson.age )
+                {
+                    return firstPerson.age - secondPerson.age;
+                }
+                else
+                {
+                    return firstPerson.weight - secondPerson.weight;
+                }
+            }
+            catch ( error )
+            {
+                console.log( error.toString() );
+            }
+
+            return 0;
+        }
+        );
+
+    let ageInterval = getAgeInterval( personArray );
+
+    if ( ageInterval !== null )
+    {
+        console.log( `First age: ${ ageInterval.firstAge }` );
+        console.log( `Last age: ${ ageInterval.lastAge }` );
+    }
+    else
+    {
+        console.log( 'No age interval' );
+    }
+}
+
+// -- STATEMENTS
+
+main();
+```
+
+```
+// -- IMPORTS
+
+import { getApplicationData, getLanguageCodePath, getLocalizedText } from "../application.ts";
+
+// -- FUNCTIONS
+
+export default function HeaderMenu(
+    {
+        languageCode
+    }
+    )
+{
+    let applicationData = getApplicationData();
+    let homePageData = applicationData.homePage;
+    let path = typeof window !== "undefined" ? window.location.pathname : "/";
+
+    return (
+        <header className="header-menu">
+            <div className="header-menu-container">
+                <div className="header-menu-logo">
+                    <h1 className="header-menu-logo-text">
+                        { getLocalizedText( homePageData.title ) }
+                    </h1>
+                </div>
+                <nav className="header-menu-nav">
+                    <ul className="header-menu-list">
+                        { applicationData.headerMenuButtonArray.map(
+                            ( menuButtonItem, buttonIndex ) =>
+                            (
+                                <li key={ buttonIndex } className="header-menu-item">
+                                    <a
+                                        href={ `/${ languageCode }/${ menuButtonItem.route }` }
+                                        className="header-menu-button"
+                                    >
+                                        <span className="header-menu-button-text">
+                                            { getLocalizedText( menuButtonItem.text ) }
+                                        </span>
+                                    </a>
+                                </li>
+                            )
+                            )}
+                    </ul>
+                </nav>
+                <div className="header-menu-language">
+                    <select
+                        className="header-menu-language-select"
+                        value={ languageCode }
+                        onChange={
+                            ( event ) =>
+                                window.location.href
+                                    = getLanguageCodePath(
+                                        path,
+                                        event.target.value
+                                        )
+                            }
+                    >
+                        { Object.entries( applicationData.languageByCodeMap ).map(
+                            ( [ languageCode, languageItem ] ) =>
+                            (
+                                <option key={ languageCode } value={ languageCode }>
+                                    { getLocalizedText( languageItem.name ) }
+                                </option>
+                            )
+                            )}
+                    </select>
+                </div>
+            </div>
+        </header>
+        );
+}
+```
+%% language=Python
+```python
+# -- IMPORTS
+
+from functools import cmp_to_key;
+from typing import TypedDict;
+
+# -- CONSTANTS
+
+minimumPassCount = 0;
+maximumPassCount = 5;
+
+# -- TYPES
+
+class AgeInterval( TypedDict ):
+
+    firstAge: int;
+    lastAge: int;
+
+# ~~
+
+class Being:
+
+    # -- CONSTRUCTORS
+
+    def __init__(
+        self,
+        name,
+        age
+        ):
+
+        self.name = name;
+        self.age = age;
+
+# ~~
+
+class Person( Being ):
+
+    # -- CONSTRUCTORS
+
+    def __init__(
+        self,
+        name,
+        age,
+        weight,
+        dogCount
+        ):
+
+        super().__init__( name, age );
+        self.weight = weight;
+        self.dogCount = dogCount;
+
+    # -- INQUIRIES
+
+    def getAge(
+        self
+        ) -> int:
+
+        return self.age;
+
+    # ~~
+
+    def getAgeOffset(
+        self,
+        otherAge
+        ) -> int:
+
+        return otherAge - self.age;
+
+    # ~~
+
+    def getHelloMessage(
+        self
+        ) -> str:
+
+        return f"Hello, my name is { self.name }, I'm { self.age } years old and I weight { self.weight } kilograms.";
+
+    # -- OPERATIONS
+
+    def setAge(
+        self,
+        age
+        ) -> None:
+
+        self.age = age;
+
+    # ~~
+
+    def setFakeAge(
+        self,
+        age
+        ) -> None:
+
+        if ( age > 0
+             and age < 50
+             and ( age < 20
+                  or age > 40 ) ):
+
+            self.age \
+                += ( age
+                     + ( age - 2 )
+                     + ( age
+                         * ( age + 10 )
+                         * ( age + 20 ) ) ) \
+                   + self.getAgeOffset(
+                         age * 2
+                         - 20
+                         );
+
+        elif ( age > 20
+               and age < 40
+               and ( age < 25
+                    or age > 35 ) ):
+
+            self.age = round( age * 0.5 );
+
+        else:
+
+            self.age = age + 10;
+
+# -- FUNCTIONS
+
+def getAgeInterval(
+    sortedPersonArray
+    ) -> AgeInterval | None:
+
+    if len( sortedPersonArray ) == 0:
+
+        return None;
+
+    else:
+
+        return (
+            {
+                'firstAge': sortedPersonArray[ 0 ].age,
+                'lastAge': sortedPersonArray[ len( sortedPersonArray ) - 1 ].age
+            }
+            );
+
+# ~~
+
+def main(
+    ) -> None:
+
+    passIndex = 0;
+
+    while passIndex < 5:
+
+        passIndex += 1;
+
+    while True:
+
+        passIndex += 1;
+
+        if passIndex >= 10:
+
+            break;
+
+    personArray \
+        = [
+              Person( 'Mike', 49, 85, 1 ),
+              Person( 'Luke', 30, 77, 0 ),
+              Person( 'John', 30, 72, 3 )
+          ];
+
+    def comparePerson(
+        firstPerson,
+        secondPerson
+        ):
+
+        try:
+
+            if firstPerson.age != secondPerson.age:
+
+                return firstPerson.age - secondPerson.age;
+
+            else:
+
+                return firstPerson.weight - secondPerson.weight;
+
+        except Exception as error:
+
+            print( str( error ) );
+
+        return 0;
+
+    personArray.sort(
+        key=cmp_to_key( comparePerson )
+        );
+
+    ageInterval = getAgeInterval( personArray );
+
+    if ageInterval is not None:
+
+        print( f"First age: { ageInterval[ 'firstAge' ] }" );
+        print( f"Last age: { ageInterval[ 'lastAge' ] }" );
+
+    else:
+
+        print( 'No age interval' );
+
+# -- STATEMENTS
+
+main();
+```
+%% language=TypeScript
+```typescript
+
+// -- CONSTANTS
+
+const
+    minimumPassCount: number = 0,
+    maximumPassCount: number = 5;
+
+// -- TYPES
+
+interface AgeInterval
+{
+    firstAge: number;
+    lastAge: number;
+}
+
+// ~~
+
+class Being
+{
+    // -- ATTRIBUTES
+
+    name: string;
+    age: number;
+
+    // -- CONSTRUCTORS
+
+    constructor(
+        name: string,
+        age: number
+        )
+    {
+        this.name = name;
+        this.age = age;
+    }
+}
+
+// ~~
+
+class Person
+    extends Being
+{
+    // -- ATTRIBUTES
+
+    weight: number;
+    dogCount: number;
+
+    // -- CONSTRUCTORS
+
+    constructor(
+        name: string,
+        age: number,
+        weight: number,
+        dogCount: number
+        )
+    {
+        super( name, age );
+        this.weight = weight;
+        this.dogCount = dogCount;
+    }
+
+    // -- INQUIRIES
+
+    getAge(
+        ) : number
+    {
+        return this.age;
+    }
+
+    // ~~
+
+    getAgeOffset(
+        otherAge: number
+        ) : number
+    {
+        return otherAge - this.age;
+    }
+
+    // ~~
+
+    getHelloMessage(
+        ) : string
+    {
+        return `Hello, my name is ${ this.name }, I'm ${ this.age } years old and I weight ${ this.weight } kilograms.`;
+    }
+
+    // -- OPERATIONS
+
+    setAge(
+        age: number
+        ) : void
+    {
+        this.age = age;
+    }
+
+    // ~~
+
+    setFakeAge(
+        age: number
+        ) : void
+    {
+        if ( age > 0
+             && age < 50
+             && ( age < 20
+                  || age > 40 ) )
+        {
+            this.age
+                += ( age
+                     + ( age - 2 )
+                     + ( age
+                         * ( age + 10 )
+                         * ( age + 20 ) ) )
+                   + this.getAgeOffset(
+                         age * 2
+                         - 20
+                         );
+        }
+        else if ( age > 20
+                  && age < 40
+                  && ( age < 25
+                       || age > 35 ) )
+        {
+            this.age = Math.round( age * 0.5 );
+        }
+        else
+        {
+            this.age = age + 10;
+        }
+    }
+}
+
+// -- FUNCTIONS
+
+function getAgeInterval(
+    sortedPersonArray: Person[]
+    ) : AgeInterval | null
+{
+    if ( sortedPersonArray.length === 0 )
+    {
+        return null;
+    }
+    else
+    {
+        return (
+            {
+                firstAge: sortedPersonArray[ 0 ].age,
+                lastAge: sortedPersonArray[ sortedPersonArray.length - 1 ].age
+            }
+            );
+    }
+}
+
+// ~~
+
+function main(
+    ) : void
+{
+    let passIndex: number = 0;
+
+    while ( passIndex < 5 )
+    {
+        ++passIndex;
+    }
+
+    do
+    {
+        ++passIndex;
+    }
+    while ( passIndex < 10 );
+
+    let personArray: Person[]
+        = [
+            new Person( 'Mike', 49, 85, 1 ),
+            new Person( 'Luke', 30, 77, 0 ),
+            new Person( 'John', 30, 72, 3 )
+        ];
+
+    personArray.sort(
+        ( firstPerson: Person, secondPerson: Person ): number =>
+        {
+            try
+            {
+                if ( firstPerson.age !== secondPerson.age )
+                {
+                    return firstPerson.age - secondPerson.age;
+                }
+                else
+                {
+                    return firstPerson.weight - secondPerson.weight;
+                }
+            }
+            catch ( error )
+            {
+                console.log( error.toString() );
+            }
+
+            return 0;
+        }
+        );
+
+    let ageInterval: AgeInterval | null = getAgeInterval( personArray );
+
+    if ( ageInterval !== null )
+    {
+        console.log( `First age: ${ ageInterval.firstAge }` );
+        console.log( `Last age: ${ ageInterval.lastAge }` );
+    }
+    else
+    {
+        console.log( 'No age interval' );
+    }
+}
+
+// -- STATEMENTS
+
+main();
+```
+
+```
+// -- IMPORTS
+
+import { getApplicationData, getLanguageCodePath, getLocalizedText } from "../application.ts";
+
+// -- FUNCTIONS
+
+export default function HeaderMenu(
+    {
+        languageCode
+    }
+    )
+{
+    let applicationData = getApplicationData();
+    let homePageData = applicationData.homePage;
+    let path = typeof window !== "undefined" ? window.location.pathname : "/";
+
+    return (
+        <header className="header-menu">
+            <div className="header-menu-container">
+                <div className="header-menu-logo">
+                    <h1 className="header-menu-logo-text">
+                        { getLocalizedText( homePageData.title ) }
+                    </h1>
+                </div>
+                <nav className="header-menu-nav">
+                    <ul className="header-menu-list">
+                        { applicationData.headerMenuButtonArray.map(
+                            ( menuButtonItem, buttonIndex ) =>
+                            (
+                                <li key={ buttonIndex } className="header-menu-item">
+                                    <a
+                                        href={ `/${ languageCode }/${ menuButtonItem.route }` }
+                                        className="header-menu-button"
+                                    >
+                                        <span className="header-menu-button-text">
+                                            { getLocalizedText( menuButtonItem.text ) }
+                                        </span>
+                                    </a>
+                                </li>
+                            )
+                            )}
+                    </ul>
+                </nav>
+                <div className="header-menu-language">
+                    <select
+                        className="header-menu-language-select"
+                        value={ languageCode }
+                        onChange={
+                            ( event ) =>
+                                window.location.href
+                                    = getLanguageCodePath(
+                                        path,
+                                        ( event.target as HTMLSelectElement ).value
+                                        )
+                            }
+                    >
+                        { Object.entries( applicationData.languageByCodeMap ).map(
+                            ( [ languageCode, languageItem ] ) =>
+                            (
+                                <option key={ languageCode } value={ languageCode }>
+                                    { getLocalizedText( ( languageItem as any ).name ) }
+                                </option>
+                            )
+                            )}
+                    </select>
+                </div>
+            </div>
+        </header>
+        );
+}
+```
+%% language=Rust
+```rust
+// -- IMPORTS
+
+use std::collections::HashMap;
+
+// -- CONSTANTS
+
+const MINIMUM_PASS_COUNT: i32 = 0;
+const MAXIMUM_PASS_COUNT: i32 = 5;
+
+// -- TYPES
+
+pub struct Being
+{
+    // -- ATTRIBUTES
+
+    pub name: String,
+    pub age: i32,
+}
+
+// ~~
+
+impl Being
+{
+    // -- CONSTRUCTORS
+
+    pub fn new(
+        name: String,
+        age: i32
+        ) -> Self
+    {
+        Self
+        {
+            name,
+            age,
+        }
+    }
+}
+
+// ~~
+
+pub struct Person
+{
+    // -- ATTRIBUTES
+
+    pub being: Being,
+    pub weight: f64,
+    pub dog_count: f64,
+}
+
+// ~~
+
+impl Person
+{
+    // -- CONSTRUCTORS
+
+    pub fn new(
+        name: String,
+        age: i32,
+        weight: f64,
+        dog_count: f64
+        ) -> Self
+    {
+        Self
+        {
+            being: Being::new( name, age ),
+            weight,
+            dog_count,
+        }
+    }
+
+    // -- INQUIRIES
+
+    pub fn get_age(
+        &self
+        ) -> i32
+    {
+        return self.being.age;
+    }
+
+    // ~~
+
+    pub fn get_age_offset(
+        &self,
+        other_age: i32
+        ) -> i32
+    {
+        return other_age - self.being.age;
+    }
+
+    // ~~
+
+    pub fn get_hello_message(
+        &self
+        ) -> String
+    {
+        return format!(
+            "Hello, my name is {}, I'm {} years old and I weight {} kilograms.",
+            self.being.name,
+            self.being.age,
+            self.weight
+            );
+    }
+
+    // -- OPERATIONS
+
+    pub fn set_age(
+        &mut self,
+        age: i32
+        )
+    {
+        self.being.age = age;
+    }
+
+    // ~~
+
+    pub fn set_fake_age(
+        &mut self,
+        age: i32
+        )
+    {
+        if age > 0
+           && age < 50
+           && ( age < 20
+                || age > 40 )
+        {
+            self.being.age
+                += ( age
+                     + ( age - 2 )
+                     + ( age
+                         * ( age + 10 )
+                         * ( age + 20 ) ) )
+                   + self.get_age_offset(
+                         age * 2
+                         - 20
+                         );
+        }
+        else if age > 20
+                && age < 40
+                && ( age < 25
+                     || age > 35 )
+        {
+            self.being.age = ( ( age as f64 ) * 0.5 ).round() as i32;
+        }
+        else
+        {
+            self.being.age = age + 10;
+        }
+    }
+}
+
+// -- FUNCTIONS
+
+pub fn get_age_interval(
+    sorted_person_vector: &Vec<Person>
+    ) -> Option<HashMap<String, i32>>
+{
+    if sorted_person_vector.is_empty()
+    {
+        return None;
+    }
+    else
+    {
+        let mut age_interval: HashMap<String, i32>
+            = HashMap::new();
+
+        age_interval.insert(
+            String::from( "firstAge" ),
+            sorted_person_vector[ 0 ].being.age
+            );
+
+        age_interval.insert(
+            String::from( "lastAge" ),
+            sorted_person_vector[ sorted_person_vector.len() - 1 ].being.age
+            );
+
+        return Some( age_interval );
+    }
+}
+
+// ~~
+
+fn main(
+    )
+{
+    let mut pass_index = 0;
+
+    while pass_index < 5
+    {
+        pass_index += 1;
+    }
+
+    loop
+    {
+        pass_index += 1;
+
+        if pass_index >= 10
+        {
+            break;
+        }
+    }
+
+    let mut person_vector: Vec<Person>
+        = vec![
+            Person::new( String::from( "Mike" ), 49, 85.0, 1.0 ),
+            Person::new( String::from( "Luke" ), 30, 77.0, 0.0 ),
+            Person::new( String::from( "John" ), 30, 72.0, 3.0 ),
+        ];
+
+    person_vector.sort_by(
+        | first_person, second_person |
+        {
+            if first_person.being.age != second_person.being.age
+            {
+                return first_person.being.age.cmp( &second_person.being.age );
+            }
+            else
+            {
+                return
+                    first_person
+                        .weight
+                        .partial_cmp( &second_person.weight )
+                        .unwrap();
+            }
+        }
+        );
+
+    let age_interval = get_age_interval( &person_vector );
+
+    if age_interval.is_some()
+    {
+        let age_interval_value = age_interval.unwrap();
+
+        println!(
+            "First age: {}",
+            age_interval_value.get( "firstAge" ).unwrap()
+            );
+
+        println!(
+            "Last age: {}",
+            age_interval_value.get( "lastAge" ).unwrap()
+            );
+    }
+    else
+    {
+        println!( "No age interval" );
+    }
+}
+```
+%%
