@@ -26,7 +26,7 @@ import std.conv : to;
 import std.file : exists, readText, write;
 import std.path : absolutePath;
 import std.stdio : writeln;
-import std.string : join, replace, split, startsWith, stripRight;
+import std.string : indexOf, join, replace, split, startsWith, stripRight;
 
 // -- FUNCTIONS
 
@@ -59,6 +59,28 @@ void Abort(
     PrintError( exception.msg );
 
     exit( -1 );
+}
+
+// ~~
+
+string[] SplitOnce(
+    string text,
+    char separator_character
+    )
+{
+    long
+        separator_character_index;
+        
+    separator_character_index = text.indexOf( separator_character );
+    
+    if ( separator_character_index >= 0 )
+    {
+        return [ text[ 0 .. separator_character_index ], text[ separator_character_index + 1 .. $ ] ];
+    }
+    else
+    {
+        return [ text ];
+    }
 }
 
 // ~~
@@ -141,10 +163,10 @@ bool GetVariableExpressionValue(
     string[]
         part_array;
 
-    part_array = expression.split( '=' );
+    part_array = expression.SplitOnce( '=' );
 
     variable_name = part_array[ 0 ];
-    variable_value = ( part_array.length > 1 ) ? part_array[ 1 ] : "";
+    variable_value = ( part_array.length == 2 ) ? part_array[ 1 ] : "";
     variable_value_by_name = variable_name in variable_value_by_name_map;
 
     if ( part_array.length == 1 )
@@ -211,6 +233,27 @@ bool GetBooleanExpressionValue(
 
 // ~~
 
+void AssignVariable(
+    string variable_definition,
+    ref string[ string ] variable_value_by_name_map
+    )
+{
+    string
+        variable_name,
+        variable_value;
+    string[]
+        part_array,
+        variable_definition_array;
+        
+    part_array = variable_definition.SplitOnce( '=' );
+
+    variable_name = part_array[ 0 ];
+    variable_value = ( part_array.length == 2 ) ? part_array[ 1 ] : "";
+    variable_value_by_name_map[ variable_name ] = variable_value;
+}
+
+// ~~
+
 string ReplaceVariables(
     string text,
     string[ string ] variable_value_by_name_map
@@ -230,11 +273,7 @@ string[ string ] GetVariableValueByNameMap(
     string source_file_configuration
     )
 {
-    string
-        variable_name,
-        variable_value;
     string[]
-        part_array,
         variable_definition_array;
     string[ string ]
         variable_value_by_name_map;
@@ -243,11 +282,7 @@ string[ string ] GetVariableValueByNameMap(
 
     foreach ( variable_definition; variable_definition_array )
     {
-        part_array = variable_definition.split( '=' );
-
-        variable_name = part_array[ 0 ];
-        variable_value = ( part_array.length > 1 ) ? part_array[ 1 ] : "";
-        variable_value_by_name_map[ variable_name ] = variable_value;
+        AssignVariable( variable_definition, variable_value_by_name_map );
     }
 
     return variable_value_by_name_map;
@@ -260,8 +295,8 @@ string GetProcessedFileText(
     string source_file_configuration
     )
 {
-    bool
-        source_line_is_kept;
+    bool[]
+        condition_array;
     long
         source_line_index;
     string
@@ -286,7 +321,7 @@ string GetProcessedFileText(
     }
 
     source_file_text = "";
-    source_line_is_kept = true;
+    condition_array = [ true, true, true ];
 
     for ( source_line_index = 0;
           source_line_index < source_line_array.length;
@@ -296,17 +331,44 @@ string GetProcessedFileText(
 
         if ( source_line == "%%" )
         {
-            source_line_is_kept = true;
+            condition_array = [ true, true, true ];
         }
         else if ( source_line.startsWith( "%% " ) )
         {
-            source_line_is_kept = source_line[ 3 .. $ ].GetBooleanExpressionValue( variable_value_by_name_map );
+            condition_array = [ source_line[ 3 .. $ ].GetBooleanExpressionValue( variable_value_by_name_map ), true, true ];
+        }
+        else if ( source_line == "%%%" )
+        {
+            condition_array[ 1 ] = true;
+            condition_array[ 2 ] = true;
+        }
+        else if ( source_line.startsWith( "%%% " ) )
+        {
+            condition_array[ 1 ] = source_line[ 4 .. $ ].GetBooleanExpressionValue( variable_value_by_name_map );
+            condition_array[ 2 ] = true;
+        }
+        else if ( source_line == "%%%%" )
+        {
+            condition_array[ 3 ] = true;
+        }
+        else if ( source_line.startsWith( "%%%% " ) )
+        {
+            condition_array[ 3 ] = source_line[ 5 .. $ ].GetBooleanExpressionValue( variable_value_by_name_map );
         }
         else
         {
-            if ( source_line_is_kept )
+            if ( condition_array[ 0 ]
+                 && condition_array[ 1 ]
+                 && condition_array[ 2 ] )
             {
-                processed_line_array ~= source_line.ReplaceVariables( variable_value_by_name_map );
+                if ( source_line.startsWith( "%: " ) )
+                {
+                    AssignVariable( source_line[ 3 .. $ ], variable_value_by_name_map );
+                }
+                else
+                {
+                    processed_line_array ~= source_line.ReplaceVariables( variable_value_by_name_map );
+                }
             }
         }
     }

@@ -2,7 +2,7 @@
 
 # Aegys
 
-Rules generator.
+Text file generator.
 
 ## Installation
 
@@ -23,7 +23,7 @@ aegys <source_file_path> <source_file_configuration> [<source_file_path> <source
 ## Example
 
 ```
-aegys csharp_front_matter.md "" coding_standards.md "language=C# greenfield" OUT/coding-standards.mdc
+aegys IN/coding-standards.mdt "format=Cursor language=TypeScript styling_language=SCSS framework=Fresh greenfield" OUT/typescript-coding-standards.mdc
 ```
 
 ## Version

@@ -1,18 +1,17 @@
 ---
-description: D coding standards
+description: coding standards
 globs:
-  - "./**/*.d"
+  - "CODE/**/*.cs"
 alwaysApply: true
 ---
-# D Coding Standards
+# C# Coding Standards
 
-Every single line of D source code of this codebase must strictly adhere to the following rules, without any exception:
+Every single line of C# source code of this codebase must strictly adhere to the following rules, without any exception. Those rules must be treated as a hard rule system, not stylistic preference.
 
-- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to D and any other code here.
-- Self-documenting code only (prefer descriptive names over explanatory comments).
+## Formatting
+
+- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to C#, HTML, CSS and any other code of this project.
 - Prefer explicit and readable code over compact code.
-- Identifiers follow usual English ordering rules (`FirstPointCloudIndex`, `ConfigurationFilePath`, `PointCloudFolderPath`) and use no shortened words, abbreviations (except `Url`) or single-letter names (except for axis names in 3D vectors).
-- No plural-form identifiers.
 - Aligned braces (Allman style) and keep the opening and closing braces always alone on their own line.
 - Each function parameter definition must be on its own line with the closing `)` of the parameter list starting its own line.
 - When an arrow function definition spans multiple lines, the arrow `=>` must end its own line, and the function code must be indented on the next line(s).
@@ -24,6 +23,15 @@ Every single line of D source code of this codebase must strictly adhere to the 
 - In multiline arithmetic expressions, put the operator (`+`, etc) at the start of the continued line, aligned with the first character of its first left operand.
 - When an assignment spans multiple lines, the assignment operator (`=`, `+=`, etc) must be indented on the next line and start the first line of the right-hand side value.
 - For non-empty `()` and `[]`, add spaces inside delimiters: `xxxxx( 10, xxxxx[ 10 ] )`. Keep empty pairs compact: `xxxxx()`, `xxxxx[]`.
+- Keep a blank line before and after a multiline call or assignment, unless it is after the opening `{` of a block or before the closing `}` of a block.
+- Keep a blank line before `return`, `if`, `for`, `while`, `foreach`, `switch`, `try`, `catch`, `finally`, `lock`, `do`, and `else` when the previous non-empty line does not end with `{`.
+- No trailing commas in any comma-separated construct.
+
+## Naming and sections
+
+- Self-documenting code only (prefer descriptive names over explanatory comments).
+- Identifiers follow usual English ordering rules (`FirstPointCloudIndex`, `ConfigurationFilePath`, `PointCloudFolderPath`) and use no shortened words, abbreviations (except `Url`) or single-letter names (except for axis names in 3D vectors).
+- No plural-form identifiers.
 - Arrow functions can only be used for getters, field values and call arguments. They can't be used to define the constructors and methods of a class.
 - Use standard section comments:
   - `// -- IMPORTS`
@@ -40,15 +48,16 @@ Every single line of D source code of this codebase must strictly adhere to the 
 - Standard section comments must only be present for non-empty sections.
 - Insert a standard separating comment `// ~~` between types, methods or functions defined within the same standard section.
 - Keep an empty line before and after any of those `// -- ...' and `// ~~` standard section and separating comments, unless the standard comment is at the start of a file or `{` block.
-- Keep an empty line before and after a multiline call or assignment, unless it is after the opening `{` of a block or before the closing `}` of a block.
 - Try to define the code inside sections following the same order as the above section comments, and within those sections, define constants, types, attributes, methods etc before the other elements of code that are using them (i.e. having the used code defined before the code that uses it, allowing for single-read full code understanding).
-- Use `Array` or `Map` suffixes matching the collection type (`ProductArray`, `ProductByIdMap`, `productArray`, `productByIdMap`).
+- Use `List` or `Dictionary` suffixes matching the collection type (`ProductList`, `ProductByIdDictionary`, `productList`, `productByIdDictionary`).
 - Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
 - Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
-- Use `PascalCase` for types, templates, interfaces, enums, and attributes.
-- Use `camelCase` for methods, functions, parameters, local variables, and enum members.
-- Use `lowercase` (and `lowercase_with_underscores` when a name has multiple words) for modules, packages, and source files.
-- Blank line before `return`, `if`, `for`, `while`, `foreach`, `switch`, `try`, `catch`, `finally`, `synchronized`, `do`, and `else` when the previous non-empty line does not end with `{`.
+- Use `PascalCase` for namespaces, types, attributes, methods, functions, properties, events, enum members, and public constants.
+- Use `_camelCase` for private fields.
+- Use `camelCase` for parameters and local variables.
+
+## Control flow
+
 - Use structured positive-branch control flow:
   - Keep the main execution path inside the positive branch of conditions.
   - Place early exit statements (`return`, `break`, `continue`, `throw`, etc.) inside the negative branch (`else`) whenever the conditional also contains the main execution path.
@@ -87,113 +96,113 @@ for ( someLoop )
     doSomething();
 }
 ```
+
+## Data evolution
+
 - Don't add any legacy data compatibility code to the codebase when some data structures change. As this project is still not deployed in production, the code and data must remain perfecly in sync.
 
-Those rules must be treated as a hard rule system, not stylistic preference.
+## C# reference sample
 
-Here is sample D code illustrating those rules:
-
-```d
+```csharp
 // -- IMPORTS
 
-import std.algorithm;
-import std.conv;
-import std.exception;
-import std.stdio;
-import std.typecons;
+using System;
+using System.Collections.Generic;
 
 // -- CONSTANTS
 
-enum int
-    minimumPassCount = 0,
-    maximumPassCount = 5;
+public static class SampleConstants
+{
+    public const int
+        MinimumPassCount = 0,
+        MaximumPassCount = 5;
+}
 
 // -- TYPES
 
-class Being
+public class Being
 {
     // -- ATTRIBUTES
 
-    string
-        name;
-    int
-        age;
+    public string
+        Name;
+    public int
+        Age;
 
     // -- CONSTRUCTORS
 
-    this(
+    public Being(
         string name,
         int age
         )
     {
-        this.name = name;
-        this.age = age;
+        Name = name;
+        Age = age;
     }
 }
 
 // ~~
 
-class Person
+public class Person
     : Being
 {
     // -- ATTRIBUTES
 
-    double
-        weight,
-        dogCount;
+    public double
+        Weight,
+        DogCount;
 
     // -- CONSTRUCTORS
 
-    this(
+    public Person(
         string name,
         int age,
         double weight,
         double dogCount
         )
+        : base( name, age )
     {
-        super( name, age );
-        this.weight = weight;
-        this.dogCount = dogCount;
+        Weight = weight;
+        DogCount = dogCount;
     }
 
     // -- INQUIRIES
 
-    int getAge(
+    public int GetAge(
         )
     {
-        return age;
+        return Age;
     }
 
     // ~~
 
-    int getAgeOffset(
+    public int GetAgeOffset(
         int otherAge
         )
     {
-        return otherAge - age;
+        return otherAge - Age;
     }
 
     // ~~
 
-    string getHelloMessage(
+    public string GetHelloMessage(
         )
     {
-        return "Hello, my name is %s, I'm %s years old and I weight %s kilograms."
-            .format( name, age, weight );
+        return $"Hello, my name is { Name }, I'm { Age } years old and I weight { Weight } kilograms.";
     }
 
     // -- OPERATIONS
 
-    void setAge(
+    public void SetAge(
         int age
         )
     {
-        this.age = age;
+        Age = age;
     }
 
     // ~~
 
-    void setFakeAge(
+    public void SetFakeAge(
         int age
         )
     {
@@ -202,13 +211,13 @@ class Person
              && ( age < 20
                   || age > 40 ) )
         {
-            this.age
+            Age
                 += ( age
                      + ( age - 2 )
                      + ( age
                          * ( age + 10 )
                          * ( age + 20 ) ) )
-                   + this.getAgeOffset(
+                   + GetAgeOffset(
                          age * 2
                          - 20
                          );
@@ -218,95 +227,100 @@ class Person
                   && ( age < 25
                        || age > 35 ) )
         {
-            this.age = cast( int )( age * 0.5 + 0.5 );
+            Age = (int)Math.Round( age * 0.5, MidpointRounding.AwayFromZero );
         }
         else
         {
-            this.age = age + 10;
+            Age = age + 10;
         }
     }
 }
 
 // -- FUNCTIONS
 
-Nullable!( int[ string ] ) getAgeInterval(
-    Person[] sortedPersonArray
-    )
+public static class SampleFunctions
 {
-    if ( sortedPersonArray.length == 0 )
+    public static Dictionary<string, int>? GetAgeInterval(
+        List<Person> sortedPersonList
+        )
     {
-        return Nullable!( int[ string ] ).init;
-    }
-    else
-    {
-        int[ string ] ageInterval
-            = [
-                "firstAge": sortedPersonArray[ 0 ].age,
-                "lastAge": sortedPersonArray[ sortedPersonArray.length - 1 ].age
-            ];
-
-        return Nullable!( int[ string ] )( ageInterval );
+        if ( sortedPersonList.Count == 0 )
+        {
+            return null;
+        }
+        else
+        {
+            return new Dictionary<string, int>
+            {
+                { "firstAge", sortedPersonList[ 0 ].Age },
+                { "lastAge", sortedPersonList[ sortedPersonList.Count - 1 ].Age }
+            };
+        }
     }
 }
 
 // ~~
 
-void main(
-    )
+public static class Program
 {
-    auto passIndex = 0;
-
-    while ( passIndex < 5 )
+    public static void Main(
+        )
     {
-        ++passIndex;
-    }
+        var passIndex = 0;
 
-    do
-    {
-        ++passIndex;
-    }
-    while ( passIndex < 10 );
-
-    Person[] personArray
-        = [
-            new Person( "Mike", 49, 85, 1 ),
-            new Person( "Luke", 30, 77, 0 ),
-            new Person( "John", 30, 72, 3 )
-        ];
-
-    personArray.sort!(
-        ( firstPerson, secondPerson )
+        while ( passIndex < 5 )
         {
-            try
-            {
-                if ( firstPerson.age != secondPerson.age )
-                {
-                    return firstPerson.age < secondPerson.age;
-                }
-                else
-                {
-                    return firstPerson.weight < secondPerson.weight;
-                }
-            }
-            catch ( Exception error )
-            {
-                writeln( error.toString() );
-            }
-
-            return false;
+            ++passIndex;
         }
-        )();
 
-    auto ageInterval = getAgeInterval( personArray );
+        do
+        {
+            ++passIndex;
+        }
+        while ( passIndex < 10 );
 
-    if ( !ageInterval.isNull )
-    {
-        writeln( "First age: ", ageInterval.get[ "firstAge" ] );
-        writeln( "Last age: ", ageInterval.get[ "lastAge" ] );
-    }
-    else
-    {
-        writeln( "No age interval" );
+        var personList
+            = new List<Person>
+            {
+                new Person( "Mike", 49, 85, 1 ),
+                new Person( "Luke", 30, 77, 0 ),
+                new Person( "John", 30, 72, 3 )
+            };
+
+        personList.Sort(
+            ( firstPerson, secondPerson ) =>
+            {
+                try
+                {
+                    if ( firstPerson.Age != secondPerson.Age )
+                    {
+                        return firstPerson.Age - secondPerson.Age;
+                    }
+                    else
+                    {
+                        return firstPerson.Weight.CompareTo( secondPerson.Weight );
+                    }
+                }
+                catch ( Exception error )
+                {
+                    Console.WriteLine( error.ToString() );
+                }
+
+                return 0;
+            }
+            );
+
+        var ageInterval = SampleFunctions.GetAgeInterval( personList );
+
+        if ( ageInterval != null )
+        {
+            Console.WriteLine( $"First age: { ageInterval[ "firstAge" ] }" );
+            Console.WriteLine( $"Last age: { ageInterval[ "lastAge" ] }" );
+        }
+        else
+        {
+            Console.WriteLine( "No age interval" );
+        }
     }
 }
 ```

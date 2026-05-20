@@ -1,18 +1,17 @@
 ---
-description: Rust coding standards
+description: coding standards
 globs:
-  - "./**/*.rs"
+  - "CODE/**/*.rs"
 alwaysApply: true
 ---
 # Rust Coding Standards
 
-Every single line of Rust source code of this codebase must strictly adhere to the following rules, without any exception:
+Every single line of Rust source code of this codebase must strictly adhere to the following rules, without any exception. Those rules must be treated as a hard rule system, not stylistic preference.
 
-- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to Rust and any other code here.
-- Self-documenting code only (prefer descriptive names over explanatory comments).
+## Formatting
+
+- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to Rust, HTML, CSS and any other code of this project.
 - Prefer explicit and readable code over compact code.
-- Identifiers follow usual English ordering rules (`FirstPointCloudIndex`, `ConfigurationFilePath`, `PointCloudFolderPath`) and use no shortened words, abbreviations (except `Url`) or single-letter names (except for axis names in 3D vectors).
-- No plural-form identifiers.
 - Aligned braces (Allman style) and keep the opening and closing braces always alone on their own line.
 - Each function parameter definition must be on its own line with the closing `)` of the parameter list starting its own line.
 - When an arrow function definition spans multiple lines, the arrow `=>` must end its own line, and the function code must be indented on the next line(s).
@@ -24,6 +23,15 @@ Every single line of Rust source code of this codebase must strictly adhere to t
 - In multiline arithmetic expressions, put the operator (`+`, etc) at the start of the continued line, aligned with the first character of its first left operand.
 - When an assignment spans multiple lines, the assignment operator (`=`, `+=`, etc) must be indented on the next line and start the first line of the right-hand side value.
 - For non-empty `()` and `[]`, add spaces inside delimiters: `xxxxx( 10, xxxxx[ 10 ] )`. Keep empty pairs compact: `xxxxx()`, `xxxxx[]`.
+- Keep a blank line before and after a multiline call or assignment, unless it is after the opening `{` of a block or before the closing `}` of a block.
+- Keep a blank line before `return`, `if`, `for`, `while`, `loop`, `match`, and `else` when the previous non-empty line does not end with `{`.
+- No trailing commas in any comma-separated construct.
+
+## Naming and sections
+
+- Self-documenting code only (prefer descriptive names over explanatory comments).
+- Identifiers follow usual English ordering rules (`FirstPointCloudIndex`, `ConfigurationFilePath`, `PointCloudFolderPath`) and use no shortened words, abbreviations (except `Url`) or single-letter names (except for axis names in 3D vectors).
+- No plural-form identifiers.
 - Arrow functions can only be used for getters, field values and call arguments. They can't be used to define the constructors and methods of a class.
 - Use standard section comments:
   - `// -- IMPORTS`
@@ -40,7 +48,6 @@ Every single line of Rust source code of this codebase must strictly adhere to t
 - Standard section comments must only be present for non-empty sections.
 - Insert a standard separating comment `// ~~` between types, methods or functions defined within the same standard section.
 - Keep an empty line before and after any of those `// -- ...' and `// ~~` standard section and separating comments, unless the standard comment is at the start of a file or `{` block.
-- Keep an empty line before and after a multiline call or assignment, unless it is after the opening `{` of a block or before the closing `}` of a block.
 - Try to define the code inside sections following the same order as the above section comments, and within those sections, define constants, types, attributes, methods etc before the other elements of code that are using them (i.e. having the used code defined before the code that uses it, allowing for single-read full code understanding).
 - Use `vector` or `map` suffixes matching the collection type (`product_vector`, `product_by_id_map`).
 - Use the `index` suffix for element indices (`product_index`).
@@ -48,7 +55,9 @@ Every single line of Rust source code of this codebase must strictly adhere to t
 - Use `UpperCamelCase` for types, traits, and enum variants.
 - Use `snake_case` for crates, modules, functions, methods, variables, parameters, fields, and macros
 - Use `SCREAMING_SNAKE_CASE` for constants and statics.
-- Blank line before `return`, `if`, `for`, `while`, `loop`, `match`, and `else` when the previous non-empty line does not end with `{`.
+
+## Control flow
+
 - Use structured positive-branch control flow:
   - Keep the main execution path inside the positive branch of conditions.
   - Place early exit statements (`return`, `break`, `continue`, `throw`, etc.) inside the negative branch (`else`) whenever the conditional also contains the main execution path.
@@ -87,11 +96,12 @@ for ( someLoop )
     doSomething();
 }
 ```
+
+## Data evolution
+
 - Don't add any legacy data compatibility code to the codebase when some data structures change. As this project is still not deployed in production, the code and data must remain perfecly in sync.
 
-Those rules must be treated as a hard rule system, not stylistic preference.
-
-Here is sample Rust code illustrating those rules:
+## Rust reference sample
 
 ```rust
 // -- IMPORTS
