@@ -1,6 +1,6 @@
 %% format=Cursor
 ---
-description: coding standards
+description: {language} coding standards
 globs:
 %%% language=C#
   - "CODE/**/*.cs"
@@ -203,43 +203,19 @@ for ( someLoop )
   (`HeaderMenu.{component_extension}` => `.header-menu`, `.header-menu-button`, `.header-menu-button-text`).
 %%%
 - Use unitless values for line heights.
-- rem values for font sizes and all other static sizes, using only multiples of 0.1rem or 0.25rem).
-- px values only for tiny static sizes, like 1 or 2 pixels.
-- Use %, dvh, lvw, vmin and vmax values for dynamic sizes.
-- Use zero or one decimal in your sizes (0.9rem, 1.2vh), unless if a second decimal is actually required (*.25rem, *.75rem).
-- Group CSS rules by category, in this order:
+- Use rem values for font sizes and all other static sizes (only multiples of 0.1rem or 0.25rem).
+- Use px values only for tiny static sizes (i.e. 1px or 2px).
+- Use maximum one decimal in your sizes (1rem, 2.5rem), unless for multiple of 0.25rem.
+- Use standard section comments to group CSS rules by category:
 ```css
 // -- IMPORTS
-
-...
-
 // -- CONSTANTS
-
-...
-
 // -- VARIABLES
-
-...
-
 // -- FUNCTIONS
-
-...
-
 // -- MIXINS
-
-...
-
 // -- FONTS
-
-...
-
 // -- ELEMENTS
-
-...
-
 // -- CLASSES
-
-...
 ```
 
 %%

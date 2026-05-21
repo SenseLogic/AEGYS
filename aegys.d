@@ -26,7 +26,7 @@ import std.conv : to;
 import std.file : exists, readText, write;
 import std.path : absolutePath;
 import std.stdio : writeln;
-import std.string : indexOf, join, replace, split, startsWith, stripRight;
+import std.string : indexOf, join, lastIndexOf, replace, split, startsWith, stripRight;
 
 // -- FUNCTIONS
 
@@ -70,9 +70,9 @@ string[] SplitOnce(
 {
     long
         separator_character_index;
-        
+
     separator_character_index = text.indexOf( separator_character );
-    
+
     if ( separator_character_index >= 0 )
     {
         return [ text[ 0 .. separator_character_index ], text[ separator_character_index + 1 .. $ ] ];
@@ -104,6 +104,48 @@ string GetLogicalPath(
     )
 {
     return path.replace( '\\', '/' );
+}
+
+// ~~
+
+string GetFolderPath(
+    string file_path
+    )
+{
+    long
+        slash_character_index;
+
+    slash_character_index = file_path.lastIndexOf( '/' );
+
+    if ( slash_character_index >= 0 )
+    {
+        return file_path[ 0 .. slash_character_index + 1 ];
+    }
+    else
+    {
+        return "";
+    }
+}
+
+// ~~
+
+string GetFileName(
+    string file_path
+    )
+{
+    long
+        slash_character_index;
+
+    slash_character_index = file_path.lastIndexOf( '/' );
+
+    if ( slash_character_index >= 0 )
+    {
+        return file_path[ slash_character_index + 1 .. $ ];
+    }
+    else
+    {
+        return file_path;
+    }
 }
 
 // ~~
@@ -181,7 +223,7 @@ bool GetVariableExpressionValue(
         }
         else
         {
-            return *variable_value_by_name == variable_value;
+            return *variable_value_by_name == variable_value.ReplaceVariables( variable_value_by_name_map );
         }
     }
 }
@@ -199,11 +241,11 @@ bool GetBooleanExpressionValue(
         condition_array,
         sub_condition_array;
 
-    condition_array = expression.replace( " ", "" ).split( '|' );
+    condition_array = expression.split( " | " );
 
     foreach ( condition; condition_array )
     {
-        sub_condition_array = condition.split( '&' );
+        sub_condition_array = condition.split( " & " );
 
         valid_sub_condition_count = 0;
 
@@ -233,27 +275,6 @@ bool GetBooleanExpressionValue(
 
 // ~~
 
-void AssignVariable(
-    string variable_definition,
-    ref string[ string ] variable_value_by_name_map
-    )
-{
-    string
-        variable_name,
-        variable_value;
-    string[]
-        part_array,
-        variable_definition_array;
-        
-    part_array = variable_definition.SplitOnce( '=' );
-
-    variable_name = part_array[ 0 ];
-    variable_value = ( part_array.length == 2 ) ? part_array[ 1 ] : "";
-    variable_value_by_name_map[ variable_name ] = variable_value;
-}
-
-// ~~
-
 string ReplaceVariables(
     string text,
     string[ string ] variable_value_by_name_map
@@ -265,6 +286,27 @@ string ReplaceVariables(
     }
 
     return text;
+}
+
+// ~~
+
+void AssignVariable(
+    string variable_definition,
+    ref string[ string ] variable_value_by_name_map
+    )
+{
+    string
+        variable_name,
+        variable_value;
+    string[]
+        part_array,
+        variable_definition_array;
+
+    part_array = variable_definition.SplitOnce( '=' );
+
+    variable_name = part_array[ 0 ];
+    variable_value = ( part_array.length == 2 ) ? part_array[ 1 ] : "";
+    variable_value_by_name_map[ variable_name ] = ReplaceVariables( variable_value, variable_value_by_name_map );
 }
 
 // ~~
@@ -282,10 +324,32 @@ string[ string ] GetVariableValueByNameMap(
 
     foreach ( variable_definition; variable_definition_array )
     {
-        AssignVariable( variable_definition, variable_value_by_name_map );
+        AssignVariable( variable_definition.replace( '^', ' ' ), variable_value_by_name_map );
     }
 
     return variable_value_by_name_map;
+}
+
+// ~~
+
+string GetIncludedFilePath(
+    string source_folder_path,
+    string included_file_path
+    )
+{
+    if ( included_file_path.indexOf( ':' ) >= 0
+         || included_file_path.startsWith( '/' ) )
+    {
+        return included_file_path;
+    }
+    else if ( included_file_path.startsWith( "./" ) )
+    {
+        return source_folder_path ~ included_file_path[ 2 .. $ ];
+    }
+    else
+    {
+        return source_folder_path ~ included_file_path;
+    }
 }
 
 // ~~
@@ -300,9 +364,12 @@ string GetProcessedFileText(
     long
         source_line_index;
     string
+        included_file_path,
+        included_text,
         source_line,
         source_file_text;
     string[]
+        included_line_array,
         processed_line_array,
         source_line_array;
     string[ string ]
@@ -361,7 +428,28 @@ string GetProcessedFileText(
                  && condition_array[ 1 ]
                  && condition_array[ 2 ] )
             {
-                if ( source_line.startsWith( "%: " ) )
+                if ( source_line.startsWith( "%? " ) )
+                {
+                    writeln( source_line[ 3 .. $ ].ReplaceVariables( variable_value_by_name_map ) );
+                }
+                else if ( source_line.startsWith( "%@ " ) )
+                {
+                    included_file_path
+                        = GetIncludedFilePath(
+                              source_file_path.GetFolderPath(),
+                              source_line[ 3 .. $ ].ReplaceVariables( variable_value_by_name_map ).GetLogicalPath()
+                              );
+                    included_text = included_file_path.ReadText();
+                    included_line_array = included_text.replace( "\r", "" ).split( '\n' );
+
+                    source_line_array
+                        = source_line_array[ 0 .. source_line_index ]
+                          ~ included_line_array
+                          ~ source_line_array[ source_line_index + 1 .. $ ];
+
+                    --source_line_index;
+                }
+                else if ( source_line.startsWith( "%: " ) )
                 {
                     AssignVariable( source_line[ 3 .. $ ], variable_value_by_name_map );
                 }
