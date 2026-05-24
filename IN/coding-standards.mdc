@@ -2,24 +2,35 @@
 ---
 description: {language} coding standards
 globs:
+%%% language=C++
+  - "CODE/**/*.cpp"
+  - "CODE/**/*.h"
 %%% language=C#
   - "CODE/**/*.cs"
 %%% language=D
   - "CODE/**/*.d"
 %%% language=Dart
   - "CODE/**/*.dart"
+%%% language=Go
+  - "CODE/**/*.go"
 %%% language=JavaScript
   - "CODE/**/*.js"
 %%% language=JavaScript & framework=Fresh
   - "CODE/**/*.jsx"
-%%% language=TypeScript
-  - "CODE/**/*.ts"
-%%% language=TypeScript & framework=Fresh
-  - "CODE/**/*.tsx"
+%%% language=Mojo
+  - "CODE/**/*.mojo"
 %%% language=Python
   - "CODE/**/*.py"
 %%% language=Rust
   - "CODE/**/*.rs"
+%%% language=Swift
+  - "CODE/**/*.swift"
+%%% language=TypeScript
+  - "CODE/**/*.ts"
+%%% language=TypeScript & framework=Fresh
+  - "CODE/**/*.tsx"
+%%% language=Zig
+  - "CODE/**/*.zig"
 %%% framework=Svelte
   - "CODE/**/*.svelte"
 %%% styling_language=SCSS
@@ -31,7 +42,7 @@ alwaysApply: true
 ---
 %%
 %: comment=//
-%% language=Python
+%% language=Mojo | language=Python
 %: comment=#
 %% language=JavaScript
 %: component_extension=jsx
@@ -58,17 +69,22 @@ Every single line of {language} source code of this codebase must strictly adher
 - When an assignment spans multiple lines, the assignment operator (`=`, `+=`, etc) must be indented on the next line and start the first line of the right-hand side value.
 - For non-empty `()` and `[]`, add spaces inside delimiters: `xxxxx( 10, xxxxx[ 10 ] )`. Keep empty pairs compact: `xxxxx()`, `xxxxx[]`.
 - Keep a blank line before and after a multiline call or assignment, unless it is after the opening `{` of a block or before the closing `}` of a block.
+%% language=C++
+- Keep a blank line before `return`, `if`, `for`, `while`, `switch`, `try`, `catch`, `finally`, `do`, and `else` when the previous non-empty line does not end with `{`.
 %% language=C#
 - Keep a blank line before `return`, `if`, `for`, `while`, `foreach`, `switch`, `try`, `catch`, `finally`, `lock`, `do`, and `else` when the previous non-empty line does not end with `{`.
 %% language=D
 - Keep a blank line before `return`, `if`, `for`, `while`, `foreach`, `switch`, `try`, `catch`, `finally`, `synchronized`, `do`, and `else` when the previous non-empty line does not end with `{`.
 %% language=Dart
 - Keep a blank line before `return`, `if`, `for`, `while`, `for-in`, `switch`, `try`, `catch`, `finally`, and `else` when the previous non-empty line does not end with `{`.
+%% language=Go
+- Keep a blank line before `return`, `if`, `for`, `switch`, `select`, and `else` when the previous non-empty line does not end with `{`.
+- Omit `;` on embedded struct type lines in struct definitions (the embedded type must remain a lone `TypeName` line).
 %% language=JavaScript | language=TypeScript
 - Keep a blank line before `return`, `if`, `for`, `while`, `for-in`, `for-of`, `switch`, `try`, `catch`, `finally`, `do`, and `else` when the previous non-empty line does not end with `{`.
-%% language=Python
+%% language=Mojo | language=Python
 - Keep a blank line before `return`, `if`, `for`, `while`, `try`, `except`, `finally`, `elif`, and `else` when the previous non-empty line does not end with `:`.
-- Keep a blank line before and after `def`, `if`, `elif`, `else`, `for`, `while`, `try`, `except`, `finally`, ` with`, `class`, `match`, and `case`.
+- Keep a blank line before and after `fn`, `def`, `if`, `elif`, `else`, `for`, `while`, `try`, `except`, `finally`, `with`, `struct`, `trait`, `match`, and `case`.
 - In multiline boolean expressions, put `and` and `or` at the start of the continued line, aligned with the first character of its first left operand.
 - Lambdas can only be used for call arguments. They can't be used to define class methods.
 - After a multiline condition, put the closing `)` on its own line and start the block with `:` on the next line.
@@ -76,6 +92,13 @@ Every single line of {language} source code of this codebase must strictly adher
 - No space before `;` or `:`.
 %% language=Rust
 - Keep a blank line before `return`, `if`, `for`, `while`, `loop`, `match`, and `else` when the previous non-empty line does not end with `{`.
+%% language=Swift
+- Keep a blank line before `return`, `if`, `for`, `while`, `for-in`, `switch`, `do`, `catch`, `guard`, and `else` when the previous non-empty line does not end with `{`.
+%% language=Go | language=JavaScript | language=Swift | language=TypeScript
+- `;` after all statements.
+- No space before `;`.
+%% language=Zig
+- Keep a blank line before `return`, `if`, `for`, `while`, `switch`, `try`, `catch`, and `else` when the previous non-empty line does not end with `{`.
 %%
 - No trailing commas in any comma-separated construct.
 
@@ -101,6 +124,13 @@ Every single line of {language} source code of this codebase must strictly adher
 - Insert a standard separating comment `{comment} ~~` between types, methods or functions defined within the same standard section.
 - Keep an empty line before and after any of those `{comment} -- ...' and `{comment} ~~` standard section and separating comments, unless the standard comment is at the start of a file or `{` block.
 - Try to define the code inside sections following the same order as the above section comments, and within those sections, define constants, types, attributes, methods etc before the other elements of code that are using them (i.e. having the used code defined before the code that uses it, allowing for single-read full code understanding).
+%% language=C++
+- Use `Array` or `Dictionary` suffixes matching the collection type (`ProductArray`, `ProductByIdDictionary`, `productArray`, `productByIdDictionary`).
+- Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
+- Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
+- Use `PascalCase` for types, methods, functions, properties, enum members, and public constants.
+- Use `_camelCase` for private and protected fields.
+- Use `camelCase` for parameters and local variables.
 %% language=C#
 - Use `List` or `Dictionary` suffixes matching the collection type (`ProductList`, `ProductByIdDictionary`, `productList`, `productByIdDictionary`).
 - Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
@@ -114,14 +144,21 @@ Every single line of {language} source code of this codebase must strictly adher
 - Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
 - Use `PascalCase` for types, templates, interfaces, enums, and attributes.
 - Use `camelCase` for methods, functions, parameters, local variables, and enum members.
-- Use `lowercase` (and `lowercase_with_underscores` when a name has multiple words) for modules, packages, and source files.
+- Use `snake_case` for modules, packages, and source files.
 %% language=Dart
 - Use `List` or `Map` suffixes matching the collection type (`ProductList`, `productList`, `ProductByIdMap`, `productByIdMap`).
 - Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
 - Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
-- Use `UpperCamelCase` for types, annotations, constructors, and type parameters.
-- Use `lowerCamelCase` for methods, functions, parameters, locals, fields, and enum values.
-- Use `lowercase_with_underscores` for libraries, packages, directories, source files, and import prefixes.
+- Use `PascalCase` for types, annotations, constructors, and type parameters.
+- Use `camelCase` for methods, functions, parameters, locals, fields, and enum values.
+- Use `snake_case` for libraries, packages, directories, source files, and import prefixes.
+%% language=Go
+- Use `Slice` or `Map` suffixes matching the collection type (`ProductSlice`, `productSlice`, `ProductByIdMap`, `productByIdMap`).
+- Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
+- Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
+- Use `PascalCase` for exported types, functions, methods, and package-level identifiers.
+- Use `camelCase` for unexported identifiers, parameters, local variables, and struct fields.
+- Use `snake_case` for package names and source file names (without the `.go` extension).
 %% language=JavaScript | language=TypeScript
 - Use `Array` or `Map` suffixes matching the collection type (`ProductArray`, `ProductByIdMap`, `productArray`, `productByIdMap`).
 - Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
@@ -130,20 +167,34 @@ Every single line of {language} source code of this codebase must strictly adher
 - Use `camelCase` for methods, functions, parameters, local variables, object properties, and enum-like members on constant objects.
 %% language=Dart | language=JavaScript | language=TypeScript
 - Prefer `let` over `const` even when the variable is not reassigned, using `const` only for true fixed constants defined at class or module level.
-%% language=Python
+%% language=Mojo | language=Python
 - Use `List` or `Map` suffixes matching the collection type (`ProductList`, `ProductByIdMap`, `productList`, `productByIdMap`).
 - Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
 - Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
 - Use `PascalCase` for classes and type names.
 - Use `snake_case` for methods, functions, parameters, local variables, attributes, modules, packages, and source files.
-- Use `SCREAMING_SNAKE_CASE` for constants.
+- Use `SCREAMING_CASE` for constants.
 %% language=Rust
 - Use `vector` or `map` suffixes matching the collection type (`product_vector`, `product_by_id_map`).
 - Use the `index` suffix for element indices (`product_index`).
 - Use the `count` suffix for element counts (`product_count`).
-- Use `UpperCamelCase` for types, traits, and enum variants.
+- Use `PascalCase` for types, traits, and enum variants.
 - Use `snake_case` for crates, modules, functions, methods, variables, parameters, fields, and macros
-- Use `SCREAMING_SNAKE_CASE` for constants and statics.
+- Use `SCREAMING_CASE` for constants and statics.
+%% language=Swift
+- Use `Array` or `Dictionary` suffixes matching the collection type (`ProductArray`, `productArray`, `ProductByIdDictionary`, `productByIdDictionary`).
+- Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
+- Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
+- Use `PascalCase` for types, protocols, enums, and enum cases.
+- Use `camelCase` for methods, functions, parameters, local variables, properties, and enum-associated values.
+- Use `SCREAMING_CASE` for global constants.
+%% language=Zig
+- Use `array` or `map` suffixes matching the collection type (`product_array`, `product_by_id_map`).
+- Use the `index` suffix for element indices (`product_index`).
+- Use the `count` suffix for element counts (`product_count`).
+- Use `PascalCase` for types, unions, enums, and error sets.
+- Use `snake_case` for functions, methods, variables, parameters, fields, and modules.
+- Use `SCREAMING_CASE` for constants and comptime values at module scope.
 %%
 
 ## Control flow
@@ -152,46 +203,90 @@ Every single line of {language} source code of this codebase must strictly adher
   - Keep the main execution path inside the positive branch of conditions.
   - Place early exit statements (`return`, `break`, `continue`, `throw`, etc.) inside the negative branch (`else`) whenever the conditional also contains the main execution path.
   - Avoid inverted guard conditions that move the primary logic outside the conditional structure.
-%% language=C# | language=D | language=Dart | language=JavaScript | language=Rust | language=TypeScript
+%% language=C++ | language=C# | language=D | language=Dart | language=Go | language=JavaScript | language=Rust | language=Swift | language=TypeScript | language=Zig
+
   Always prefer:
-```
-if ( someCondition )
-{
-    for ( someLoop )
-    {
-        if ( someCondition )
-        {
-            doSomething();
-        }
-        else
-        {
-            break;
-        }
-    }
-}
-```
+
+  ```
+  if ( someCondition )
+  {
+      for ( someLoop )
+      {
+          if ( someOtherCondition )
+          {
+              doSomething();
+          }
+          else
+          {
+              break;
+          }
+      }
+  }
+  ```
+
   Instead of:
-```
-if ( !someCondition )
-{
-    return;
-}
 
-for ( someLoop )
-{
-    if ( !someCondition )
-    {
-        break;
-    }
+  ```
+  if ( !someCondition )
+  {
+      return;
+  }
 
-    doSomething();
-}
-```
+  for ( someLoop )
+  {
+      if ( !someOtherCondition )
+      {
+          break;
+      }
+
+      doSomething();
+  }
+  ```
+%% language=Mojo | language=Python
+
+  Always prefer:
+
+  ```
+  if some_condition:
+
+      for some_loop:
+
+          if some_other_condition:
+
+              do_something();
+
+          else:
+
+              break;
+  ```
+
+    Instead of:
+
+  ```
+  if not some_condition:
+
+      return;
+
+  for some_loop:
+
+      if not some_other_condition:
+
+          break;
+
+      do_something();
+  ```
 %% greenfield
 
 ## Data evolution
 
 - Don't add any legacy data compatibility code to the codebase when some data structures change. As this project is still not deployed in production, the code and data must remain perfecly in sync.
+%% framework
+
+## State management
+
+%%% framework=Fresh
+- Use Preact Signals (`@preact/signals`) for application state management.
+%%%
 %% styling_language
 
 ## Styling Conventions
@@ -207,21 +302,261 @@ for ( someLoop )
 - Use px values only for tiny static sizes (i.e. 1px or 2px).
 - Use maximum one decimal in your sizes (1rem, 2.5rem), unless for multiple of 0.25rem.
 - Use standard section comments to group CSS rules by category:
-```css
-// -- IMPORTS
-// -- CONSTANTS
-// -- VARIABLES
-// -- FUNCTIONS
-// -- MIXINS
-// -- FONTS
-// -- ELEMENTS
-// -- CLASSES
-```
-
+  - `// -- IMPORTS`
+  - `// -- CONSTANTS`
+  - `// -- VARIABLES`
+  - `// -- FUNCTIONS`
+  - `// -- MIXINS`
+  - `// -- FONTS` (for @font-face definitions)
+  - `// -- ELEMENTS`
+  - `// -- CLASSES`
 %%
 
 ## {language} reference sample
 
+%% language=C++
+```cpp
+// -- IMPORTS
+
+#include "Engine/Core/Common.h"
+#include "Engine/Core/Collections/Dictionary.h"
+#include "Engine/Core/Log.h"
+
+// -- CONSTANTS
+
+constexpr int32
+    MinimumPassCount = 0,
+    MaximumPassCount = 5;
+
+// -- TYPES
+
+class Being
+{
+    // == PUBLIC
+
+    public:
+
+    // -- ATTRIBUTES
+
+    String
+        Name;
+    int32
+        Age;
+
+    // -- CONSTRUCTORS
+
+    Being(
+        String name,
+        int32 age
+        )
+    {
+        Name = name;
+        Age = age;
+    }
+};
+
+// ~~
+
+class Person:
+    public Being
+{
+    // == PUBLIC
+
+    public:
+
+    // -- ATTRIBUTES
+
+    double
+        Weight,
+        DogCount;
+
+    // -- CONSTRUCTORS
+
+    Person(
+        String name,
+        int32 age,
+        double weight,
+        double dogCount
+        ):
+        Being( name, age )
+    {
+        Weight = weight;
+        DogCount = dogCount;
+    }
+
+    // -- INQUIRIES
+
+    int32 GetAge(
+        )
+    {
+        return Age;
+    }
+
+    // ~~
+
+    int32 GetAgeOffset(
+        int32 otherAge
+        )
+    {
+        return otherAge - Age;
+    }
+
+    // ~~
+
+    String GetHelloMessage(
+        )
+    {
+        return
+            String::Format(
+                TEXT( "Hello, my name is {0}, I'm {1} years old and I weight {2} kilograms." ),
+                Name,
+                Age,
+                Weight
+                );
+    }
+
+    // -- OPERATIONS
+
+    void SetAge(
+        int32 age
+        )
+    {
+        Age = age;
+    }
+
+    // ~~
+
+    void SetFakeAge(
+        int32 age
+        )
+    {
+        if ( age > 0
+             && age < 50
+             && ( age < 20
+                  || age > 40 ) )
+        {
+            Age
+                += ( age
+                     + ( age - 2 )
+                     + ( age
+                         * ( age + 10 )
+                         * ( age + 20 ) ) )
+                   + GetAgeOffset(
+                         age * 2
+                         - 20
+                         );
+        }
+        else if ( age > 20
+                  && age < 40
+                  && ( age < 25
+                       || age > 35 ) )
+        {
+            Age = Math::Round( (double)age * 0.5 );
+        }
+        else
+        {
+            Age = age + 10;
+        }
+    }
+};
+
+// -- FUNCTIONS
+
+Dictionary<String, int32>* GetAgeInterval(
+    const Array<Person>& sortedPersonArray
+    )
+{
+    if ( sortedPersonArray.Count() == 0 )
+    {
+        return nullptr;
+    }
+    else
+    {
+        auto ageIntervalDictionary = new Dictionary<String, int32>();
+
+        ageIntervalDictionary->Add(
+            TEXT( "firstAge" ),
+            sortedPersonArray[ 0 ].Age
+            );
+
+        ageIntervalDictionary->Add(
+            TEXT( "lastAge" ),
+            sortedPersonArray[ sortedPersonArray.Count() - 1 ].Age
+            );
+
+        return ageIntervalDictionary;
+    }
+}
+
+// ~~
+
+void Main(
+    )
+{
+    int32 passIndex = 0;
+
+    while ( passIndex < 5 )
+    {
+        ++passIndex;
+    }
+
+    do
+    {
+        ++passIndex;
+    }
+    while ( passIndex < 10 );
+
+    Array<Person> personArray;
+
+    personArray.Add( Person( TEXT( "Mike" ), 49, 85, 1 ) );
+    personArray.Add( Person( TEXT( "Luke" ), 30, 77, 0 ) );
+    personArray.Add( Person( TEXT( "John" ), 30, 72, 3 ) );
+
+    personArray.Sort(
+        []( const Person& firstPerson, const Person& secondPerson )
+        {
+            try
+            {
+                if ( firstPerson.Age != secondPerson.Age )
+                {
+                    return firstPerson.Age - secondPerson.Age;
+                }
+                else
+                {
+                    return (int32)Math::Sign( firstPerson.Weight - secondPerson.Weight );
+                }
+            }
+            catch ( const Exception& error )
+            {
+                LOG( Error, error.ToString() );
+            }
+
+            return 0;
+        }
+        );
+
+    auto ageIntervalDictionary = GetAgeInterval( personArray );
+
+    if ( ageIntervalDictionary != nullptr )
+    {
+        LOG(
+            Info,
+            TEXT( "First age: {0}" ),
+            ageIntervalDictionary->At( TEXT( "firstAge" ) )
+            );
+
+        LOG(
+            Info,
+            TEXT( "Last age: {0}" ),
+            ageIntervalDictionary->At( TEXT( "lastAge" ) )
+            );
+    }
+    else
+    {
+        LOG( Info, TEXT( "No age interval" ) );
+    }
+}
+```
 %% language=C#
 ```csharp
 // -- IMPORTS
@@ -263,8 +598,8 @@ public class Being
 
 // ~~
 
-public class Person
-    : Being
+public class Person:
+    Being
 {
     // -- ATTRIBUTES
 
@@ -279,8 +614,8 @@ public class Person
         int age,
         double weight,
         double dogCount
-        )
-        : base( name, age )
+        ):
+        base( name, age )
     {
         Weight = weight;
         DogCount = dogCount;
@@ -485,8 +820,8 @@ class Being
 
 // ~~
 
-class Person
-    : Being
+class Person:
+    Being
 {
     // -- ATTRIBUTES
 
@@ -711,7 +1046,8 @@ class Person
         int age,
         this.weight,
         this.dogCount
-        ) : super( name, age );
+        ):
+        super( name, age );
 
     // -- INQUIRIES
 
@@ -903,7 +1239,8 @@ class SampleCubit
     // -- CONSTRUCTORS
 
     SampleCubit(
-        ) : super( const SampleState() );
+        ):
+        super( const SampleState() );
 
     // -- OPERATIONS
 
@@ -1038,6 +1375,245 @@ void main(
                     )
             )
         );
+}
+```
+%% language=Go
+```go
+// -- IMPORTS
+
+import (
+    "fmt"
+    "sort"
+    );
+
+// -- CONSTANTS
+
+const (
+    MinimumPassCount = 0,
+    MaximumPassCount = 5
+    );
+
+// -- TYPES
+
+type Being struct
+{
+    // -- ATTRIBUTES
+
+    Name string;
+    Age int;
+}
+
+// ~~
+
+type Person struct
+{
+    // -- ATTRIBUTES
+
+    Being
+    Weight float64;
+    DogCount float64;
+}
+
+// -- CONSTRUCTORS
+
+func NewBeing(
+    name string,
+    age int
+    ) Being
+{
+    return Being
+    {
+        Name: name,
+        Age: age
+    };
+}
+
+// ~~
+
+func NewPerson(
+    name string,
+    age int,
+    weight float64,
+    dogCount float64
+    ) Person
+{
+    return Person
+    {
+        Being: NewBeing( name, age ),
+        Weight: weight,
+        DogCount: dogCount
+    };
+}
+
+// -- INQUIRIES
+
+func ( person Person ) GetAge(
+    ) int
+{
+    return person.Age;
+}
+
+// ~~
+
+func ( person Person ) GetAgeOffset(
+    otherAge int
+    ) int
+{
+    return otherAge - person.Age;
+}
+
+// ~~
+
+func ( person Person ) GetHelloMessage(
+    ) string
+{
+    return (
+        fmt.Sprintf(
+            "Hello, my name is %s, I'm %d years old and I weight %f kilograms.",
+            person.Name,
+            person.Age,
+            person.Weight
+            )
+        );
+}
+
+// -- OPERATIONS
+
+func ( person *Person ) SetAge(
+    age int
+    )
+{
+    person.Age = age;
+}
+
+// ~~
+
+func ( person *Person ) SetFakeAge(
+    age int
+    )
+{
+    if ( age > 0
+         && age < 50
+         && ( age < 20
+              || age > 40 ) )
+    {
+        person.Age
+            += ( age
+                 + ( age - 2 )
+                 + ( age
+                     * ( age + 10 )
+                     * ( age + 20 ) ) )
+               + person.GetAgeOffset(
+                     age * 2
+                     - 20
+                     );
+    }
+    else if ( age > 20
+              && age < 40
+              && ( age < 25
+                   || age > 35 ) )
+    {
+        person.Age = int( float64( age ) * 0.5 + 0.5 );
+    }
+    else
+    {
+        person.Age = age + 10;
+    }
+}
+
+// -- FUNCTIONS
+
+func GetAgeInterval(
+    sortedPersonSlice []Person
+    ) map[string]int
+{
+    if ( len( sortedPersonSlice ) == 0 )
+    {
+        return nil;
+    }
+    else
+    {
+        return map[string]int
+        {
+            "firstAge": sortedPersonSlice[ 0 ].Age,
+            "lastAge": sortedPersonSlice[ len( sortedPersonSlice ) - 1 ].Age
+        };
+    }
+}
+
+// ~~
+
+func main(
+    )
+{
+    passIndex := 0;
+
+    for passIndex < 5
+    {
+        passIndex++;
+    }
+
+    for
+    {
+        passIndex++;
+
+        if ( passIndex >= 10 )
+        {
+            break;
+        }
+    }
+
+    personSlice
+        := []Person
+            {
+                NewPerson( "Mike", 49, 85, 1 ),
+                NewPerson( "Luke", 30, 77, 0 ),
+                NewPerson( "John", 30, 72, 3 )
+            };
+
+    sort.Slice(
+        personSlice,
+        func(
+            firstPersonIndex int,
+            secondPersonIndex int
+            ) bool
+        {
+            firstPerson := personSlice[ firstPersonIndex ];
+            secondPerson := personSlice[ secondPersonIndex ];
+
+            if ( firstPerson.Age != secondPerson.Age )
+            {
+                return firstPerson.Age < secondPerson.Age;
+            }
+            else
+            {
+                return firstPerson.Weight < secondPerson.Weight;
+            }
+        }
+        );
+
+    ageInterval := GetAgeInterval( personSlice );
+
+    if ( ageInterval != nil )
+    {
+        fmt.Println(
+            fmt.Sprintf(
+                "First age: %d",
+                ageInterval[ "firstAge" ]
+                )
+            );
+
+        fmt.Println(
+            fmt.Sprintf(
+                "Last age: %d",
+                ageInterval[ "lastAge" ]
+                )
+            );
+    }
+    else
+    {
+        fmt.Println( "No age interval" );
+    }
 }
 ```
 %% language=JavaScript
@@ -1315,6 +1891,202 @@ export default function HeaderMenu(
         );
 }
 ```
+%% language=Mojo
+```mojo
+# -- IMPORTS
+
+from collections import OptionalDict;
+from sys import exit;
+
+# -- CONSTANTS
+
+alias minimum_pass_count: Int = 0;
+alias maximum_pass_count: Int = 5;
+
+# -- TYPES
+
+@fieldwise_init
+struct AgeInterval:
+
+    var first_age: Int;
+    var last_age: Int;
+
+# ~~
+
+struct Being:
+
+    var name: String;
+    var age: Int;
+
+    # -- CONSTRUCTORS
+
+    fn __init__(
+        inout self,
+        name: String,
+        age: Int
+        ):
+
+        self.name = name;
+        self.age = age;
+
+# ~~
+
+struct Person( Being ):
+
+    var weight: Float64;
+    var dog_count: Float64;
+
+    # -- CONSTRUCTORS
+
+    fn __init__(
+        inout self,
+        name: String,
+        age: Int,
+        weight: Float64,
+        dog_count: Float64
+        ):
+
+        self.name = name;
+        self.age = age;
+        self.weight = weight;
+        self.dog_count = dog_count;
+
+    # -- INQUIRIES
+
+    fn get_age(
+        self
+        ) -> Int:
+
+        return self.age;
+
+    # ~~
+
+    fn get_age_offset(
+        self,
+        other_age: Int
+        ) -> Int:
+
+        return other_age - self.age;
+
+    # ~~
+
+    fn get_hello_message(
+        self
+        ) -> String:
+
+        return "Hello, my name is " + self.name + ", I'm " + String( self.age ) + " years old and I weight " + String( self.weight ) + " kilograms.";
+
+    # -- OPERATIONS
+
+    fn set_age(
+        inout self,
+        age: Int
+        ):
+
+        self.age = age;
+
+    # ~~
+
+    fn set_fake_age(
+        inout self,
+        age: Int
+        ):
+
+        if ( age > 0
+             and age < 50
+             and ( age < 20
+                  or age > 40 ) ):
+
+            self.age \
+                += ( age
+                     + ( age - 2 )
+                     + ( age
+                         * ( age + 10 )
+                         * ( age + 20 ) ) ) \
+                   + self.get_age_offset(
+                         age * 2
+                         - 20
+                         );
+
+        elif ( age > 20
+               and age < 40
+               and ( age < 25
+                    or age > 35 ) ):
+
+            self.age = Int( Float64( age ) * 0.5 );
+
+        else:
+
+            self.age = age + 10;
+
+# -- FUNCTIONS
+
+fn get_age_interval(
+    sorted_person_list: List[Person]
+    ) -> OptionalDict[String, Int]:
+
+    if len( sorted_person_list ) == 0:
+
+        return None;
+
+    else:
+
+        return (
+            {
+                "firstAge": sorted_person_list[ 0 ].age,
+                "lastAge": sorted_person_list[ len( sorted_person_list ) - 1 ].age
+            }
+            );
+
+# ~~
+
+fn main(
+    ):
+
+    var pass_index = 0;
+
+    while pass_index < 5:
+
+        pass_index += 1;
+
+    while True:
+
+        pass_index += 1;
+
+        if pass_index >= 10:
+
+            break;
+
+    person_list \
+        = [
+              Person( "Mike", 49, 85, 1 ),
+              Person( "Luke", 30, 77, 0 ),
+              Person( "John", 30, 72, 3 )
+          ];
+
+    person_list.sort(
+        key=lambda first_person, second_person: (
+            first_person.age - second_person.age
+            if first_person.age != second_person.age
+            else Int( first_person.weight - second_person.weight )
+            )
+        );
+
+    age_interval = get_age_interval( person_list );
+
+    if age_interval is not None:
+
+        print( "First age: " + String( age_interval[ "firstAge" ] ) );
+        print( "Last age: " + String( age_interval[ "lastAge" ] ) );
+
+    else:
+
+        print( "No age interval" );
+
+# -- STATEMENTS
+
+main();
+```
 %% language=Python
 ```python
 # -- IMPORTS
@@ -1520,6 +2292,236 @@ def main(
 
 main();
 ```
+%% language=Swift
+```swift
+// -- IMPORTS
+
+import Foundation
+
+// -- CONSTANTS
+
+let minimumPassCount: Int = 0;
+let maximumPassCount: Int = 5;
+
+// -- TYPES
+
+class Being
+{
+    // -- ATTRIBUTES
+
+    var name: String;
+    var age: Int;
+
+    // -- CONSTRUCTORS
+
+    init(
+        name: String,
+        age: Int
+        )
+    {
+        self.name = name;
+        self.age = age;
+    }
+}
+
+// ~~
+
+class Person: Being
+{
+    // -- ATTRIBUTES
+
+    var weight: Double;
+    var dogCount: Double;
+
+    // -- CONSTRUCTORS
+
+    init(
+        name: String,
+        age: Int,
+        weight: Double,
+        dogCount: Double
+        )
+    {
+        super.init(
+            name: name,
+            age: age
+            );
+        self.weight = weight;
+        self.dogCount = dogCount;
+    }
+
+    // -- INQUIRIES
+
+    func getAge(
+        ) -> Int
+    {
+        return age;
+    }
+
+    // ~~
+
+    func getAgeOffset(
+        otherAge: Int
+        ) -> Int
+    {
+        return otherAge - age;
+    }
+
+    // ~~
+
+    func getHelloMessage(
+        ) -> String
+    {
+        return "Hello, my name is \( name ), I'm \( age ) years old and I weight \( weight ) kilograms.";
+    }
+
+    // -- OPERATIONS
+
+    func setAge(
+        age: Int
+        )
+    {
+        self.age = age;
+    }
+
+    // ~~
+
+    func setFakeAge(
+        age: Int
+        )
+    {
+        if ( age > 0
+             && age < 50
+             && ( age < 20
+                  || age > 40 ) )
+        {
+            self.age
+                += ( age
+                     + ( age - 2 )
+                     + ( age
+                         * ( age + 10 )
+                         * ( age + 20 ) ) )
+                   + self.getAgeOffset(
+                         age * 2
+                         - 20
+                         );
+        }
+        else if ( age > 20
+                  && age < 40
+                  && ( age < 25
+                       || age > 35 ) )
+        {
+            self.age = Int( Double( age ) * 0.5 );
+        }
+        else
+        {
+            self.age = age + 10;
+        }
+    }
+}
+
+// -- FUNCTIONS
+
+func getAgeInterval(
+    sortedPersonArray: [Person]
+    ) -> [String: Int]?
+{
+    if ( sortedPersonArray.isEmpty )
+    {
+        return nil;
+    }
+    else
+    {
+        return
+            [
+                "firstAge": sortedPersonArray[ 0 ].age,
+                "lastAge": sortedPersonArray[ sortedPersonArray.count - 1 ].age
+            ];
+    }
+}
+
+// ~~
+
+func main(
+    )
+{
+    var passIndex = 0;
+
+    while ( passIndex < 5 )
+    {
+        passIndex += 1;
+    }
+
+    repeat
+    {
+        passIndex += 1;
+    }
+    while ( passIndex < 10 );
+
+    var personArray
+        = [
+            Person(
+                name: "Mike",
+                age: 49,
+                weight: 85,
+                dogCount: 1
+                ),
+            Person(
+                name: "Luke",
+                age: 30,
+                weight: 77,
+                dogCount: 0
+                ),
+            Person(
+                name: "John",
+                age: 30,
+                weight: 72,
+                dogCount: 3
+                )
+        ];
+
+    personArray.sort(
+        {
+            firstPerson,
+            secondPerson in
+
+            do
+            {
+                if ( firstPerson.age != secondPerson.age )
+                {
+                    return firstPerson.age < secondPerson.age;
+                }
+                else
+                {
+                    return firstPerson.weight < secondPerson.weight;
+                }
+            }
+            catch let error
+            {
+                print( error );
+            }
+
+            return false;
+        }
+        );
+
+    let ageInterval = getAgeInterval( personArray );
+
+    if ( ageInterval != nil )
+    {
+        print( "First age: \( ageInterval![ "firstAge" ]! )" );
+        print( "Last age: \( ageInterval![ "lastAge" ]! )" );
+    }
+    else
+    {
+        print( "No age interval" );
+    }
+}
+
+// -- STATEMENTS
+
+main();
+```
 %% language=TypeScript
 ```typescript
 // -- CONSTANTS
@@ -1584,7 +2586,7 @@ class Person
     // -- INQUIRIES
 
     getAge(
-        ) : number
+        ): number
     {
         return this.age;
     }
@@ -1593,7 +2595,7 @@ class Person
 
     getAgeOffset(
         otherAge: number
-        ) : number
+        ): number
     {
         return otherAge - this.age;
     }
@@ -1601,7 +2603,7 @@ class Person
     // ~~
 
     getHelloMessage(
-        ) : string
+        ): string
     {
         return `Hello, my name is ${ this.name }, I'm ${ this.age } years old and I weight ${ this.weight } kilograms.`;
     }
@@ -1610,7 +2612,7 @@ class Person
 
     setAge(
         age: number
-        ) : void
+        ): void
     {
         this.age = age;
     }
@@ -1619,7 +2621,7 @@ class Person
 
     setFakeAge(
         age: number
-        ) : void
+        ): void
     {
         if ( age > 0
              && age < 50
@@ -1655,7 +2657,7 @@ class Person
 
 function getAgeInterval(
     sortedPersonArray: Person[]
-    ) : AgeInterval | null
+    ): AgeInterval | null
 {
     if ( sortedPersonArray.length === 0 )
     {
@@ -1675,7 +2677,7 @@ function getAgeInterval(
 // ~~
 
 function main(
-    ) : void
+    ): void
 {
     let passIndex: number = 0;
 
@@ -2060,6 +3062,257 @@ fn main(
     else
     {
         println!( "No age interval" );
+    }
+}
+```
+%% language=Zig
+```zig
+// -- IMPORTS
+
+const std = @import( "std" );
+
+// -- CONSTANTS
+
+const minimum_pass_count: i32 = 0;
+const maximum_pass_count: i32 = 5;
+
+// -- TYPES
+
+const AgeInterval =
+    struct
+    {
+        first_age: i32,
+        last_age: i32,
+    };
+
+// ~~
+
+const Being =
+    struct
+    {
+        // -- ATTRIBUTES
+
+        name: []const u8,
+        age: i32,
+
+        // -- CONSTRUCTORS
+
+        fn init(
+            name: []const u8,
+            age: i32
+            ) Being
+        {
+            return
+                .{
+                    .name = name,
+                    .age = age,
+                };
+        }
+    };
+
+// ~~
+
+const Person =
+    struct
+    {
+        // -- ATTRIBUTES
+
+        being: Being,
+        weight: f64,
+        dog_count: f64,
+
+        // -- CONSTRUCTORS
+
+        fn init(
+            name: []const u8,
+            age: i32,
+            weight: f64,
+            dog_count: f64
+            ) Person
+        {
+            return
+                .{
+                    .being = Being.init( name, age ),
+                    .weight = weight,
+                    .dog_count = dog_count,
+                };
+        }
+
+        // -- INQUIRIES
+
+        fn get_age(
+            self: Person
+            ) i32
+        {
+            return self.being.age;
+        }
+
+        // ~~
+
+        fn get_age_offset(
+            self: Person,
+            other_age: i32
+            ) i32
+        {
+            return other_age - self.being.age;
+        }
+
+        // ~~
+
+        fn get_hello_message(
+            self: Person
+            ) []const u8
+        {
+            return std.fmt.allocPrint(
+                std.heap.page_allocator,
+                "Hello, my name is {s}, I'm {} years old and I weight {} kilograms.",
+                .{ self.being.name, self.being.age, self.weight }
+                ) catch "";
+        }
+
+        // -- OPERATIONS
+
+        fn set_age(
+            self: *Person,
+            age: i32
+            ) void
+        {
+            self.being.age = age;
+        }
+
+        // ~~
+
+        fn set_fake_age(
+            self: *Person,
+            age: i32
+            ) void
+        {
+            if ( age > 0
+                 and age < 50
+                 and ( age < 20
+                       or age > 40 ) )
+            {
+                self.being.age
+                    += ( age
+                        + ( age - 2 )
+                        + ( age
+                            * ( age + 10 )
+                            * ( age + 20 ) ) )
+                        + self.get_age_offset(
+                            age * 2
+                            - 20
+                            );
+            }
+            else if ( age > 20
+                      and age < 40
+                      and ( age < 25
+                            or age > 35 ) )
+            {
+                self.being.age = @intFromFloat( @round( @as( f64, @floatFromInt( age ) ) * 0.5 ) );
+            }
+            else
+            {
+                self.being.age = age + 10;
+            }
+        }
+    };
+
+// -- FUNCTIONS
+
+fn get_age_interval(
+    sorted_person_array: []const Person
+    ) ?AgeInterval
+{
+    if ( sorted_person_array.len == 0 )
+    {
+        return null;
+    }
+    else
+    {
+        return
+            AgeInterval
+            {
+                .first_age = sorted_person_array[ 0 ].being.age,
+                .last_age = sorted_person_array[ sorted_person_array.len - 1 ].being.age,
+            };
+    }
+}
+
+// ~~
+
+pub fn main(
+    ) !void
+{
+    var pass_index: i32 = 0;
+
+    while ( pass_index < 5 )
+    {
+        pass_index += 1;
+    }
+
+    while ( true )
+    {
+        pass_index += 1;
+
+        if ( pass_index >= 10 )
+        {
+            break;
+        }
+    }
+
+    var person_array =
+        [_]Person
+        {
+            Person.init( "Mike", 49, 85, 1 ),
+            Person.init( "Luke", 30, 77, 0 ),
+            Person.init( "John", 30, 72, 3 ),
+        };
+
+    std.mem.sort(
+        Person,
+        &person_array,
+        {},
+        struct
+        {
+            fn lessThan(
+                _context: void,
+                first_person: Person,
+                second_person: Person
+                ) bool
+            {
+                _ = _context;
+
+                if ( first_person.being.age != second_person.being.age )
+                {
+                    return first_person.being.age < second_person.being.age;
+                }
+                else
+                {
+                    return first_person.weight < second_person.weight;
+                }
+            }
+        }.lessThan
+        );
+
+    const age_interval = get_age_interval( &person_array );
+
+    if ( age_interval != null )
+    {
+        const age_interval_value = age_interval.?;
+
+        std.debug.print(
+            "First age: {}\n",
+            .{ age_interval_value.first_age }
+            );
+
+        std.debug.print(
+            "Last age: {}\n",
+            .{ age_interval_value.last_age }
+            );
+    }
+    else
+    {
+        std.debug.print( "No age interval\n", .{} );
     }
 }
 ```

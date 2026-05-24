@@ -1,5 +1,5 @@
 ---
-description: coding standards
+description: D coding standards
 globs:
   - "CODE/**/*.d"
 alwaysApply: true
@@ -54,7 +54,7 @@ Every single line of D source code of this codebase must strictly adhere to the 
 - Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
 - Use `PascalCase` for types, templates, interfaces, enums, and attributes.
 - Use `camelCase` for methods, functions, parameters, local variables, and enum members.
-- Use `lowercase` (and `lowercase_with_underscores` when a name has multiple words) for modules, packages, and source files.
+- Use `snake_case` for modules, packages, and source files.
 
 ## Control flow
 
@@ -62,40 +62,44 @@ Every single line of D source code of this codebase must strictly adhere to the 
   - Keep the main execution path inside the positive branch of conditions.
   - Place early exit statements (`return`, `break`, `continue`, `throw`, etc.) inside the negative branch (`else`) whenever the conditional also contains the main execution path.
   - Avoid inverted guard conditions that move the primary logic outside the conditional structure.
+
   Always prefer:
-```
-if ( someCondition )
-{
-    for ( someLoop )
-    {
-        if ( someCondition )
-        {
-            doSomething();
-        }
-        else
-        {
-            break;
-        }
-    }
-}
-```
+
+  ```
+  if ( someCondition )
+  {
+      for ( someLoop )
+      {
+          if ( someOtherCondition )
+          {
+              doSomething();
+          }
+          else
+          {
+              break;
+          }
+      }
+  }
+  ```
+
   Instead of:
-```
-if ( !someCondition )
-{
-    return;
-}
 
-for ( someLoop )
-{
-    if ( !someCondition )
-    {
-        break;
-    }
+  ```
+  if ( !someCondition )
+  {
+      return;
+  }
 
-    doSomething();
-}
-```
+  for ( someLoop )
+  {
+      if ( !someOtherCondition )
+      {
+          break;
+      }
+
+      doSomething();
+  }
+  ```
 
 ## Data evolution
 
@@ -143,8 +147,8 @@ class Being
 
 // ~~
 
-class Person
-    : Being
+class Person:
+    Being
 {
     // -- ATTRIBUTES
 

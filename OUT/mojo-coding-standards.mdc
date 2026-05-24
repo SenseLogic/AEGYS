@@ -1,16 +1,16 @@
 ---
-description: Python coding standards
+description: Mojo coding standards
 globs:
-  - "CODE/**/*.py"
+  - "CODE/**/*.mojo"
 alwaysApply: true
 ---
-# Python Coding Standards
+# Mojo Coding Standards
 
-Every single line of Python source code of this codebase must strictly adhere to the following rules, without any exception. Those rules must be treated as a hard rule system, not stylistic preference.
+Every single line of Mojo source code of this codebase must strictly adhere to the following rules, without any exception. Those rules must be treated as a hard rule system, not stylistic preference.
 
 ## Formatting
 
-- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to Python, HTML, CSS and any other code of this project.
+- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to Mojo, HTML, CSS and any other code of this project.
 - Prefer explicit and readable code over compact code.
 - Aligned braces (Allman style) and keep the opening and closing braces always alone on their own line.
 - Each function parameter definition must be on its own line with the closing `)` of the parameter list starting its own line.
@@ -105,36 +105,40 @@ Every single line of Python source code of this codebase must strictly adhere to
 
 - Don't add any legacy data compatibility code to the codebase when some data structures change. As this project is still not deployed in production, the code and data must remain perfecly in sync.
 
-## Python reference sample
+## Mojo reference sample
 
-```python
+```mojo
 # -- IMPORTS
 
-from functools import cmp_to_key;
-from typing import TypedDict;
+from collections import OptionalDict;
+from sys import exit;
 
 # -- CONSTANTS
 
-minimumPassCount = 0;
-maximumPassCount = 5;
+alias minimum_pass_count: Int = 0;
+alias maximum_pass_count: Int = 5;
 
 # -- TYPES
 
-class AgeInterval( TypedDict ):
+@fieldwise_init
+struct AgeInterval:
 
-    firstAge: int;
-    lastAge: int;
+    var first_age: Int;
+    var last_age: Int;
 
 # ~~
 
-class Being:
+struct Being:
+
+    var name: String;
+    var age: Int;
 
     # -- CONSTRUCTORS
 
-    def __init__(
-        self,
-        name,
-        age
+    fn __init__(
+        inout self,
+        name: String,
+        age: Int
         ):
 
         self.name = name;
@@ -142,62 +146,66 @@ class Being:
 
 # ~~
 
-class Person( Being ):
+struct Person( Being ):
+
+    var weight: Float64;
+    var dog_count: Float64;
 
     # -- CONSTRUCTORS
 
-    def __init__(
-        self,
-        name,
-        age,
-        weight,
-        dogCount
+    fn __init__(
+        inout self,
+        name: String,
+        age: Int,
+        weight: Float64,
+        dog_count: Float64
         ):
 
-        super().__init__( name, age );
+        self.name = name;
+        self.age = age;
         self.weight = weight;
-        self.dogCount = dogCount;
+        self.dog_count = dog_count;
 
     # -- INQUIRIES
 
-    def getAge(
+    fn get_age(
         self
-        ) -> int:
+        ) -> Int:
 
         return self.age;
 
     # ~~
 
-    def getAgeOffset(
+    fn get_age_offset(
         self,
-        otherAge
-        ) -> int:
+        other_age: Int
+        ) -> Int:
 
-        return otherAge - self.age;
+        return other_age - self.age;
 
     # ~~
 
-    def getHelloMessage(
+    fn get_hello_message(
         self
-        ) -> str:
+        ) -> String:
 
-        return f"Hello, my name is { self.name }, I'm { self.age } years old and I weight { self.weight } kilograms.";
+        return "Hello, my name is " + self.name + ", I'm " + String( self.age ) + " years old and I weight " + String( self.weight ) + " kilograms.";
 
     # -- OPERATIONS
 
-    def setAge(
-        self,
-        age
-        ) -> None:
+    fn set_age(
+        inout self,
+        age: Int
+        ):
 
         self.age = age;
 
     # ~~
 
-    def setFakeAge(
-        self,
-        age
-        ) -> None:
+    fn set_fake_age(
+        inout self,
+        age: Int
+        ):
 
         if ( age > 0
              and age < 50
@@ -210,7 +218,7 @@ class Person( Being ):
                      + ( age
                          * ( age + 10 )
                          * ( age + 20 ) ) ) \
-                   + self.getAgeOffset(
+                   + self.get_age_offset(
                          age * 2
                          - 20
                          );
@@ -220,7 +228,7 @@ class Person( Being ):
                and ( age < 25
                     or age > 35 ) ):
 
-            self.age = round( age * 0.5 );
+            self.age = Int( Float64( age ) * 0.5 );
 
         else:
 
@@ -228,11 +236,11 @@ class Person( Being ):
 
 # -- FUNCTIONS
 
-def getAgeInterval(
-    sortedPersonArray
-    ) -> AgeInterval | None:
+fn get_age_interval(
+    sorted_person_list: List[Person]
+    ) -> OptionalDict[String, Int]:
 
-    if len( sortedPersonArray ) == 0:
+    if len( sorted_person_list ) == 0:
 
         return None;
 
@@ -240,72 +248,55 @@ def getAgeInterval(
 
         return (
             {
-                'firstAge': sortedPersonArray[ 0 ].age,
-                'lastAge': sortedPersonArray[ len( sortedPersonArray ) - 1 ].age
+                "firstAge": sorted_person_list[ 0 ].age,
+                "lastAge": sorted_person_list[ len( sorted_person_list ) - 1 ].age
             }
             );
 
 # ~~
 
-def main(
-    ) -> None:
+fn main(
+    ):
 
-    passIndex = 0;
+    var pass_index = 0;
 
-    while passIndex < 5:
+    while pass_index < 5:
 
-        passIndex += 1;
+        pass_index += 1;
 
     while True:
 
-        passIndex += 1;
+        pass_index += 1;
 
-        if passIndex >= 10:
+        if pass_index >= 10:
 
             break;
 
-    personArray \
+    person_list \
         = [
-              Person( 'Mike', 49, 85, 1 ),
-              Person( 'Luke', 30, 77, 0 ),
-              Person( 'John', 30, 72, 3 )
+              Person( "Mike", 49, 85, 1 ),
+              Person( "Luke", 30, 77, 0 ),
+              Person( "John", 30, 72, 3 )
           ];
 
-    def comparePerson(
-        firstPerson,
-        secondPerson
-        ):
-
-        try:
-
-            if firstPerson.age != secondPerson.age:
-
-                return firstPerson.age - secondPerson.age;
-
-            else:
-
-                return firstPerson.weight - secondPerson.weight;
-
-        except Exception as error:
-
-            print( str( error ) );
-
-        return 0;
-
-    personArray.sort(
-        key=cmp_to_key( comparePerson )
+    person_list.sort(
+        key=lambda first_person, second_person: (
+            first_person.age - second_person.age
+            if first_person.age != second_person.age
+            else Int( first_person.weight - second_person.weight )
+            )
         );
 
-    ageInterval = getAgeInterval( personArray );
+    age_interval = get_age_interval( person_list );
 
-    if ageInterval is not None:
+    if age_interval is not None:
 
-        print( f"First age: { ageInterval[ 'firstAge' ] }" );
-        print( f"Last age: { ageInterval[ 'lastAge' ] }" );
+        print( "First age: " + String( age_interval[ "firstAge" ] ) );
+        print( "Last age: " + String( age_interval[ "lastAge" ] ) );
 
     else:
 
-        print( 'No age interval' );
+        print( "No age interval" );
 
 # -- STATEMENTS
 

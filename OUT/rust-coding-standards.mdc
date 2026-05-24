@@ -1,5 +1,5 @@
 ---
-description: coding standards
+description: Rust coding standards
 globs:
   - "CODE/**/*.rs"
 alwaysApply: true
@@ -52,9 +52,9 @@ Every single line of Rust source code of this codebase must strictly adhere to t
 - Use `vector` or `map` suffixes matching the collection type (`product_vector`, `product_by_id_map`).
 - Use the `index` suffix for element indices (`product_index`).
 - Use the `count` suffix for element counts (`product_count`).
-- Use `UpperCamelCase` for types, traits, and enum variants.
+- Use `PascalCase` for types, traits, and enum variants.
 - Use `snake_case` for crates, modules, functions, methods, variables, parameters, fields, and macros
-- Use `SCREAMING_SNAKE_CASE` for constants and statics.
+- Use `SCREAMING_CASE` for constants and statics.
 
 ## Control flow
 
@@ -62,40 +62,44 @@ Every single line of Rust source code of this codebase must strictly adhere to t
   - Keep the main execution path inside the positive branch of conditions.
   - Place early exit statements (`return`, `break`, `continue`, `throw`, etc.) inside the negative branch (`else`) whenever the conditional also contains the main execution path.
   - Avoid inverted guard conditions that move the primary logic outside the conditional structure.
+
   Always prefer:
-```
-if ( someCondition )
-{
-    for ( someLoop )
-    {
-        if ( someCondition )
-        {
-            doSomething();
-        }
-        else
-        {
-            break;
-        }
-    }
-}
-```
+
+  ```
+  if ( someCondition )
+  {
+      for ( someLoop )
+      {
+          if ( someOtherCondition )
+          {
+              doSomething();
+          }
+          else
+          {
+              break;
+          }
+      }
+  }
+  ```
+
   Instead of:
-```
-if ( !someCondition )
-{
-    return;
-}
 
-for ( someLoop )
-{
-    if ( !someCondition )
-    {
-        break;
-    }
+  ```
+  if ( !someCondition )
+  {
+      return;
+  }
 
-    doSomething();
-}
-```
+  for ( someLoop )
+  {
+      if ( !someOtherCondition )
+      {
+          break;
+      }
+
+      doSomething();
+  }
+  ```
 
 ## Data evolution
 

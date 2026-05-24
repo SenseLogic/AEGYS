@@ -1,16 +1,16 @@
 ---
-description: Dart coding standards
+description: Swift coding standards
 globs:
-  - "CODE/**/*.dart"
+  - "CODE/**/*.swift"
 alwaysApply: true
 ---
-# Dart Coding Standards
+# Swift Coding Standards
 
-Every single line of Dart source code of this codebase must strictly adhere to the following rules, without any exception. Those rules must be treated as a hard rule system, not stylistic preference.
+Every single line of Swift source code of this codebase must strictly adhere to the following rules, without any exception. Those rules must be treated as a hard rule system, not stylistic preference.
 
 ## Formatting
 
-- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to Dart, HTML, CSS and any other code of this project.
+- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to Swift, HTML, CSS and any other code of this project.
 - Prefer explicit and readable code over compact code.
 - Aligned braces (Allman style) and keep the opening and closing braces always alone on their own line.
 - Each function parameter definition must be on its own line with the closing `)` of the parameter list starting its own line.
@@ -24,7 +24,9 @@ Every single line of Dart source code of this codebase must strictly adhere to t
 - When an assignment spans multiple lines, the assignment operator (`=`, `+=`, etc) must be indented on the next line and start the first line of the right-hand side value.
 - For non-empty `()` and `[]`, add spaces inside delimiters: `xxxxx( 10, xxxxx[ 10 ] )`. Keep empty pairs compact: `xxxxx()`, `xxxxx[]`.
 - Keep a blank line before and after a multiline call or assignment, unless it is after the opening `{` of a block or before the closing `}` of a block.
-- Keep a blank line before `return`, `if`, `for`, `while`, `for-in`, `switch`, `try`, `catch`, `finally`, and `else` when the previous non-empty line does not end with `{`.
+- Keep a blank line before `return`, `if`, `for`, `while`, `for-in`, `switch`, `do`, `catch`, `guard`, and `else` when the previous non-empty line does not end with `{`.
+- `;` after all statements.
+- No space before `;`.
 - No trailing commas in any comma-separated construct.
 
 ## Naming and sections
@@ -49,13 +51,12 @@ Every single line of Dart source code of this codebase must strictly adhere to t
 - Insert a standard separating comment `// ~~` between types, methods or functions defined within the same standard section.
 - Keep an empty line before and after any of those `// -- ...' and `// ~~` standard section and separating comments, unless the standard comment is at the start of a file or `{` block.
 - Try to define the code inside sections following the same order as the above section comments, and within those sections, define constants, types, attributes, methods etc before the other elements of code that are using them (i.e. having the used code defined before the code that uses it, allowing for single-read full code understanding).
-- Use `List` or `Map` suffixes matching the collection type (`ProductList`, `productList`, `ProductByIdMap`, `productByIdMap`).
+- Use `Array` or `Dictionary` suffixes matching the collection type (`ProductArray`, `productArray`, `ProductByIdDictionary`, `productByIdDictionary`).
 - Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
 - Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
-- Use `PascalCase` for types, annotations, constructors, and type parameters.
-- Use `camelCase` for methods, functions, parameters, locals, fields, and enum values.
-- Use `snake_case` for libraries, packages, directories, source files, and import prefixes.
-- Prefer `let` over `const` even when the variable is not reassigned, using `const` only for true fixed constants defined at class or module level.
+- Use `PascalCase` for types, protocols, enums, and enum cases.
+- Use `camelCase` for methods, functions, parameters, local variables, properties, and enum-associated values.
+- Use `SCREAMING_CASE` for global constants.
 
 ## Control flow
 
@@ -106,18 +107,17 @@ Every single line of Dart source code of this codebase must strictly adhere to t
 
 - Don't add any legacy data compatibility code to the codebase when some data structures change. As this project is still not deployed in production, the code and data must remain perfecly in sync.
 
-## Dart reference sample
+## Swift reference sample
 
-```dart
+```swift
 // -- IMPORTS
 
-import 'dart:core';
+import Foundation
 
 // -- CONSTANTS
 
-const int
-    minimumPassCount = 0,
-    maximumPassCount = 5;
+let minimumPassCount: Int = 0;
+let maximumPassCount: Int = 5;
 
 // -- TYPES
 
@@ -125,78 +125,85 @@ class Being
 {
     // -- ATTRIBUTES
 
-    String
-        name;
-    int
-        age;
+    var name: String;
+    var age: Int;
 
     // -- CONSTRUCTORS
 
-    Being(
-        this.name,
-        this.age
-        );
+    init(
+        name: String,
+        age: Int
+        )
+    {
+        self.name = name;
+        self.age = age;
+    }
 }
 
 // ~~
 
-class Person
-    extends Being
+class Person: Being
 {
     // -- ATTRIBUTES
 
-    double
-        weight,
-        dogCount;
+    var weight: Double;
+    var dogCount: Double;
 
     // -- CONSTRUCTORS
 
-    Person(
-        String name,
-        int age,
-        this.weight,
-        this.dogCount
-        ):
-        super( name, age );
+    init(
+        name: String,
+        age: Int,
+        weight: Double,
+        dogCount: Double
+        )
+    {
+        super.init(
+            name: name,
+            age: age
+            );
+        self.weight = weight;
+        self.dogCount = dogCount;
+    }
 
     // -- INQUIRIES
 
-    int getAge(
-        )
+    func getAge(
+        ) -> Int
     {
         return age;
     }
 
     // ~~
 
-    int getAgeOffset(
-        int otherAge
-        )
+    func getAgeOffset(
+        otherAge: Int
+        ) -> Int
     {
         return otherAge - age;
     }
 
     // ~~
 
-    String getHelloMessage(
-        )
+    func getHelloMessage(
+        ) -> String
     {
-        return 'Hello, my name is ${ name }, I\'m ${ age } years old and I weight ${ weight } kilograms.';
+        return "Hello, my name is \( name ), I'm \( age ) years old and I weight \( weight ) kilograms.";
     }
 
     // -- OPERATIONS
 
-    void setAge(
-        int age
+    func setAge(
+        age: Int
         )
     {
-        this.age = age;
+        self.age = age;
     }
 
     // ~~
 
-    void setFakeAge(
-        int age
+    func setFakeAge(
+        age: Int
         )
     {
         if ( age > 0
@@ -204,13 +211,13 @@ class Person
              && ( age < 20
                   || age > 40 ) )
         {
-            this.age
+            self.age
                 += ( age
                      + ( age - 2 )
                      + ( age
                          * ( age + 10 )
                          * ( age + 20 ) ) )
-                   + this.getAgeOffset(
+                   + self.getAgeOffset(
                          age * 2
                          - 20
                          );
@@ -220,93 +227,114 @@ class Person
                   && ( age < 25
                        || age > 35 ) )
         {
-            this.age = ( age * 0.5 ).round();
+            self.age = Int( Double( age ) * 0.5 );
         }
         else
         {
-            this.age = age + 10;
+            self.age = age + 10;
         }
     }
 }
 
 // -- FUNCTIONS
 
-Map<String, int>? getAgeInterval(
-    List<Person> sortedPersonList
-    )
+func getAgeInterval(
+    sortedPersonArray: [Person]
+    ) -> [String: Int]?
 {
-    if ( sortedPersonList.isEmpty )
+    if ( sortedPersonArray.isEmpty )
     {
-        return null;
+        return nil;
     }
     else
     {
         return
-            {
-                'firstAge': sortedPersonList[ 0 ].age,
-                'lastAge': sortedPersonList[ sortedPersonList.length - 1 ].age
-            };
+            [
+                "firstAge": sortedPersonArray[ 0 ].age,
+                "lastAge": sortedPersonArray[ sortedPersonArray.count - 1 ].age
+            ];
     }
 }
 
 // ~~
 
-void main(
+func main(
     )
 {
     var passIndex = 0;
 
     while ( passIndex < 5 )
     {
-        ++passIndex;
+        passIndex += 1;
     }
 
-    do
+    repeat
     {
-        ++passIndex;
+        passIndex += 1;
     }
     while ( passIndex < 10 );
 
-    var personList
+    var personArray
         = [
-            Person( 'Mike', 49, 85, 1 ),
-            Person( 'Luke', 30, 77, 0 ),
-            Person( 'John', 30, 72, 3 )
+            Person(
+                name: "Mike",
+                age: 49,
+                weight: 85,
+                dogCount: 1
+                ),
+            Person(
+                name: "Luke",
+                age: 30,
+                weight: 77,
+                dogCount: 0
+                ),
+            Person(
+                name: "John",
+                age: 30,
+                weight: 72,
+                dogCount: 3
+                )
         ];
 
-    personList.sort(
-        ( firstPerson, secondPerson )
+    personArray.sort(
         {
-            try
+            firstPerson,
+            secondPerson in
+
+            do
             {
                 if ( firstPerson.age != secondPerson.age )
                 {
-                    return firstPerson.age - secondPerson.age;
+                    return firstPerson.age < secondPerson.age;
                 }
                 else
                 {
-                    return firstPerson.weight.compareTo( secondPerson.weight );
+                    return firstPerson.weight < secondPerson.weight;
                 }
             }
-            catch ( error )
+            catch let error
             {
-                print( error.toString() );
+                print( error );
             }
 
-            return 0;
+            return false;
         }
         );
 
-    var ageInterval = getAgeInterval( personList );
+    let ageInterval = getAgeInterval( personArray );
 
-    if ( ageInterval != null )
+    if ( ageInterval != nil )
     {
-        print( 'First age: ${ ageInterval[ 'firstAge' ] }' );
-        print( 'Last age: ${ ageInterval[ 'lastAge' ] }' );
+        print( "First age: \( ageInterval![ "firstAge" ]! )" );
+        print( "Last age: \( ageInterval![ "lastAge" ]! )" );
     }
     else
     {
-        print( 'No age interval' );
+        print( "No age interval" );
     }
 }
+
+// -- STATEMENTS
+
+main();
 ```

@@ -1,5 +1,5 @@
 ---
-description: coding standards
+description: C# coding standards
 globs:
   - "CODE/**/*.cs"
 alwaysApply: true
@@ -62,40 +62,44 @@ Every single line of C# source code of this codebase must strictly adhere to the
   - Keep the main execution path inside the positive branch of conditions.
   - Place early exit statements (`return`, `break`, `continue`, `throw`, etc.) inside the negative branch (`else`) whenever the conditional also contains the main execution path.
   - Avoid inverted guard conditions that move the primary logic outside the conditional structure.
+
   Always prefer:
-```
-if ( someCondition )
-{
-    for ( someLoop )
-    {
-        if ( someCondition )
-        {
-            doSomething();
-        }
-        else
-        {
-            break;
-        }
-    }
-}
-```
+
+  ```
+  if ( someCondition )
+  {
+      for ( someLoop )
+      {
+          if ( someOtherCondition )
+          {
+              doSomething();
+          }
+          else
+          {
+              break;
+          }
+      }
+  }
+  ```
+
   Instead of:
-```
-if ( !someCondition )
-{
-    return;
-}
 
-for ( someLoop )
-{
-    if ( !someCondition )
-    {
-        break;
-    }
+  ```
+  if ( !someCondition )
+  {
+      return;
+  }
 
-    doSomething();
-}
-```
+  for ( someLoop )
+  {
+      if ( !someOtherCondition )
+      {
+          break;
+      }
+
+      doSomething();
+  }
+  ```
 
 ## Data evolution
 
@@ -143,8 +147,8 @@ public class Being
 
 // ~~
 
-public class Person
-    : Being
+public class Person:
+    Being
 {
     // -- ATTRIBUTES
 
@@ -159,8 +163,8 @@ public class Person
         int age,
         double weight,
         double dogCount
-        )
-        : base( name, age )
+        ):
+        base( name, age )
     {
         Weight = weight;
         DogCount = dogCount;
