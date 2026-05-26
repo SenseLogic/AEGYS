@@ -1,7 +1,7 @@
 ---
 description: D coding standards
 globs:
-  - "CODE/**/*.d"
+  - "**/*.d"
 alwaysApply: true
 ---
 # D Coding Standards

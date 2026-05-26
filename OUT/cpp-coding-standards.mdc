@@ -1,8 +1,8 @@
 ---
 description: C++ coding standards
 globs:
-  - "CODE/**/*.cpp"
-  - "CODE/**/*.h"
+  - "**/*.cpp"
+  - "**/*.h"
 alwaysApply: true
 ---
 # C++ Coding Standards

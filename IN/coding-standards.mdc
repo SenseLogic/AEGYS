@@ -1,42 +1,48 @@
+%% !code_folder
+%: code_folder=
 %% format=Cursor
 ---
 description: {language} coding standards
 globs:
 %%% language=C++
-  - "CODE/**/*.cpp"
-  - "CODE/**/*.h"
+  - "{code_folder}**/*.cpp"
+  - "{code_folder}**/*.h"
 %%% language=C#
-  - "CODE/**/*.cs"
+  - "{code_folder}**/*.cs"
 %%% language=D
-  - "CODE/**/*.d"
+  - "{code_folder}**/*.d"
 %%% language=Dart
-  - "CODE/**/*.dart"
-%%% language=Go
-  - "CODE/**/*.go"
+  - "{code_folder}**/*.dart"
+%%% language=Generis
+  - "{code_folder}**/*.gs"
 %%% language=JavaScript
-  - "CODE/**/*.js"
+  - "{code_folder}**/*.js"
 %%% language=JavaScript & framework=Fresh
-  - "CODE/**/*.jsx"
+  - "{code_folder}**/*.jsx"
 %%% language=Mojo
-  - "CODE/**/*.mojo"
+  - "{code_folder}**/*.mojo"
+%%% language=PHOENIX
+  - "{code_folder}**/*.php"
+%%% language=PHP
+  - "{code_folder}**/*.php"
 %%% language=Python
-  - "CODE/**/*.py"
+  - "{code_folder}**/*.py"
 %%% language=Rust
-  - "CODE/**/*.rs"
+  - "{code_folder}**/*.rs"
 %%% language=Swift
-  - "CODE/**/*.swift"
+  - "{code_folder}**/*.swift"
 %%% language=TypeScript
-  - "CODE/**/*.ts"
+  - "{code_folder}**/*.ts"
 %%% language=TypeScript & framework=Fresh
-  - "CODE/**/*.tsx"
+  - "{code_folder}**/*.tsx"
 %%% language=Zig
-  - "CODE/**/*.zig"
+  - "{code_folder}**/*.zig"
 %%% framework=Svelte
-  - "CODE/**/*.svelte"
+  - "{code_folder}**/*.svelte"
 %%% styling_language=SCSS
-  - "CODE/**/*.scss"
+  - "{code_folder}**/*.scss"
 %%% styling_language=Stylus
-  - "CODE/**/*.stylus"
+  - "{code_folder}**/*.stylus"
 %%%
 alwaysApply: true
 ---
@@ -55,6 +61,11 @@ Every single line of {language} source code of this codebase must strictly adher
 
 ## Formatting
 
+%% language=JavaScript | language=TypeScript
+- It is forbidden to format the {language} code with `prettier`, `biome`, `dprint`, `eslint`, `deno fmt`, etc.
+%% language=Zig
+- It is fordidden to format the {language} code with `zig fmt`.
+%%
 - Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to {language}, HTML, CSS and any other code of this project.
 - Prefer explicit and readable code over compact code.
 - Aligned braces (Allman style) and keep the opening and closing braces always alone on their own line.
@@ -77,11 +88,13 @@ Every single line of {language} source code of this codebase must strictly adher
 - Keep a blank line before `return`, `if`, `for`, `while`, `foreach`, `switch`, `try`, `catch`, `finally`, `synchronized`, `do`, and `else` when the previous non-empty line does not end with `{`.
 %% language=Dart
 - Keep a blank line before `return`, `if`, `for`, `while`, `for-in`, `switch`, `try`, `catch`, `finally`, and `else` when the previous non-empty line does not end with `{`.
-%% language=Go
+%% language=Generis
 - Keep a blank line before `return`, `if`, `for`, `switch`, `select`, and `else` when the previous non-empty line does not end with `{`.
 - Omit `;` on embedded struct type lines in struct definitions (the embedded type must remain a lone `TypeName` line).
 %% language=JavaScript | language=TypeScript
 - Keep a blank line before `return`, `if`, `for`, `while`, `for-in`, `for-of`, `switch`, `try`, `catch`, `finally`, `do`, and `else` when the previous non-empty line does not end with `{`.
+%% language=PHP
+- Keep a blank line before `return`, `if`, `for`, `foreach`, `while`, `switch`, `try`, `catch`, `finally`, `do`, `elseif`, and `else` when the previous non-empty line does not end with `{`.
 %% language=Mojo | language=Python
 - Keep a blank line before `return`, `if`, `for`, `while`, `try`, `except`, `finally`, `elif`, and `else` when the previous non-empty line does not end with `:`.
 - Keep a blank line before and after `fn`, `def`, `if`, `elif`, `else`, `for`, `while`, `try`, `except`, `finally`, `with`, `struct`, `trait`, `match`, and `case`.
@@ -94,7 +107,7 @@ Every single line of {language} source code of this codebase must strictly adher
 - Keep a blank line before `return`, `if`, `for`, `while`, `loop`, `match`, and `else` when the previous non-empty line does not end with `{`.
 %% language=Swift
 - Keep a blank line before `return`, `if`, `for`, `while`, `for-in`, `switch`, `do`, `catch`, `guard`, and `else` when the previous non-empty line does not end with `{`.
-%% language=Go | language=JavaScript | language=Swift | language=TypeScript
+%% language=Generis | language=JavaScript | language=Swift | language=TypeScript
 - `;` after all statements.
 - No space before `;`.
 %% language=Zig
@@ -152,7 +165,7 @@ Every single line of {language} source code of this codebase must strictly adher
 - Use `PascalCase` for types, annotations, constructors, and type parameters.
 - Use `camelCase` for methods, functions, parameters, locals, fields, and enum values.
 - Use `snake_case` for libraries, packages, directories, source files, and import prefixes.
-%% language=Go
+%% language=Generis
 - Use `Slice` or `Map` suffixes matching the collection type (`ProductSlice`, `productSlice`, `ProductByIdMap`, `productByIdMap`).
 - Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
 - Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
@@ -167,6 +180,13 @@ Every single line of {language} source code of this codebase must strictly adher
 - Use `camelCase` for methods, functions, parameters, local variables, object properties, and enum-like members on constant objects.
 %% language=Dart | language=JavaScript | language=TypeScript
 - Prefer `let` over `const` even when the variable is not reassigned, using `const` only for true fixed constants defined at class or module level.
+%% language=Phoenix | language=PHP
+- Use `Array` or `Map` suffixes matching the collection type (`ProductArray`, `ProductByIdMap`, `productArray`, `productByIdMap`).
+- Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
+- Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
+- Use `PascalCase` for namespaces, classes, interfaces, traits, and enums.
+- Use `camelCase` for methods, functions, parameters, local variables, properties, and enum cases.
+- Use `SCREAMING_CASE` for constants.
 %% language=Mojo | language=Python
 - Use `List` or `Map` suffixes matching the collection type (`ProductList`, `ProductByIdMap`, `productList`, `productByIdMap`).
 - Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
@@ -203,7 +223,7 @@ Every single line of {language} source code of this codebase must strictly adher
   - Keep the main execution path inside the positive branch of conditions.
   - Place early exit statements (`return`, `break`, `continue`, `throw`, etc.) inside the negative branch (`else`) whenever the conditional also contains the main execution path.
   - Avoid inverted guard conditions that move the primary logic outside the conditional structure.
-%% language=C++ | language=C# | language=D | language=Dart | language=Go | language=JavaScript | language=Rust | language=Swift | language=TypeScript | language=Zig
+%% language=C++ | language=C# | language=D | language=Dart | language=Generis | language=JavaScript | language=Phoenix | language=PHP | language=Rust | language=Swift | language=TypeScript | language=Zig
 
   Always prefer:
 
@@ -1377,8 +1397,10 @@ void main(
         );
 }
 ```
-%% language=Go
+%% language=Generis
 ```go
+package main;
+
 // -- IMPORTS
 
 import (
@@ -1409,7 +1431,7 @@ type Person struct
 {
     // -- ATTRIBUTES
 
-    Being
+    Being;
     Weight float64;
     DogCount float64;
 }
@@ -2084,6 +2106,493 @@ fn main(
         print( "No age interval" );
 
 # -- STATEMENTS
+
+main();
+```
+%% language=Phoenix
+```php
+// -- CONSTANTS
+
+const
+    MINIMUM_PASS_COUNT = 0,
+    MAXIMUM_PASS_COUNT = 5;
+
+// -- TYPES
+
+class AgeInterval
+{
+    // -- ATTRIBUTES
+
+    public int
+        firstAge,
+        lastAge;
+
+    // -- CONSTRUCTORS
+
+    public function constructor(
+        int firstAge,
+        int lastAge
+        )
+    {
+        .firstAge = firstAge;
+        .lastAge = lastAge;
+    }
+}
+
+// ~~
+
+class Being
+{
+    // -- ATTRIBUTES
+
+    public string
+        name;
+    public int
+        age;
+
+    // -- CONSTRUCTORS
+
+    public function constructor(
+        string name,
+        int age
+        )
+    {
+        .name = name;
+        .age = age;
+    }
+}
+
+// ~~
+
+class Person extends Being
+{
+    // -- ATTRIBUTES
+
+    public float
+        weight,
+        dogCount;
+
+    // -- CONSTRUCTORS
+
+    public function constructor(
+        string name,
+        int age,
+        float weight,
+        float dogCount
+        )
+    {
+        parent::constructor( name, age );
+        .weight = weight;
+        .dogCount = dogCount;
+    }
+
+    // -- INQUIRIES
+
+    public function getAge(
+        ): int
+    {
+        return .age;
+    }
+
+    // ~~
+
+    public function getAgeOffset(
+        int otherAge
+        ): int
+    {
+        return otherAge - .age;
+    }
+
+    // ~~
+
+    public function getHelloMessage(
+        ): string
+    {
+        return "Hello, my name is {.name}, I'm {.age} years old and I weight {.weight} kilograms.";
+    }
+
+    // -- OPERATIONS
+
+    public function setAge(
+        int age
+        ): void
+    {
+        .age = age;
+    }
+
+    // ~~
+
+    public function setFakeAge(
+        int age
+        ): void
+    {
+        if ( age > 0
+             && age < 50
+             && ( age < 20
+                  || age > 40 ) )
+        {
+            .age
+                += ( age
+                     + ( age - 2 )
+                     + ( age
+                         * ( age + 10 )
+                         * ( age + 20 ) ) )
+                   + .getAgeOffset(
+                        age * 2
+                        - 20
+                        );
+        }
+        elseif ( age > 20
+                 && age < 40
+                 && ( age < 25
+                      || age > 35 ) )
+        {
+            .age
+                = (int)round(
+                    age * 0.5
+                    );
+        }
+        else
+        {
+            .age = age + 10;
+        }
+    }
+}
+
+// -- FUNCTIONS
+
+function getAgeInterval(
+    array sortedPersonArray
+    ): ?AgeInterval
+{
+    if ( count( sortedPersonArray ) === 0 )
+    {
+        return null;
+    }
+    else
+    {
+        return
+            new AgeInterval(
+                sortedPersonArray[ 0 ].age,
+                sortedPersonArray[ count( sortedPersonArray ) - 1 ].age
+                );
+    }
+}
+
+// ~~
+
+function main(
+    ): void
+{
+    var passIndex = 0;
+
+    while ( passIndex < 5 )
+    {
+        passIndex += 1;
+    }
+
+    while ( true )
+    {
+        passIndex += 1;
+
+        if ( passIndex >= 10 )
+        {
+            break;
+        }
+    }
+
+    var personArray
+        = [
+              new Person( 'Mike', 49, 85.0, 1.0 ),
+              new Person( 'Luke', 30, 77.0, 0.0 ),
+              new Person( 'John', 30, 72.0, 3.0 )
+          ];
+
+    usort(
+        personArray,
+        function (
+            Person firstPerson,
+            Person secondPerson
+            ): int
+        {
+            try
+            {
+                if ( firstPerson.age !== secondPerson.age )
+                {
+                    return firstPerson.age <=> secondPerson.age;
+                }
+                else
+                {
+                    return firstPerson.weight <=> secondPerson.weight;
+                }
+            }
+            catch ( Throwable error )
+            {
+                print( error.getMessage() . PHP_EOL );
+            }
+
+            return 0;
+        }
+        );
+
+    var ageInterval = getAgeInterval( personArray );
+
+    if ( ageInterval !== null )
+    {
+        print( "First age: {ageInterval.firstAge}" . PHP_EOL );
+        print( "Last age: {ageInterval.lastAge}" . PHP_EOL );
+    }
+    else
+    {
+        print( 'No age interval' . PHP_EOL );
+    }
+}
+
+// -- STATEMENTS
+
+main();
+```
+%% language=PHP
+```php
+<?php
+// -- CONSTANTS
+
+const
+    MINIMUM_PASS_COUNT = 0,
+    MAXIMUM_PASS_COUNT = 5;
+
+// -- TYPES
+
+class AgeInterval
+{
+    // -- ATTRIBUTES
+
+    public int
+        firstAge,
+        lastAge;
+
+    // -- CONSTRUCTORS
+
+    public function __construct(
+        int $firstAge,
+        int $lastAge
+        )
+    {
+        $this->firstAge = $firstAge;
+        $this->lastAge = $lastAge;
+    }
+}
+
+// ~~
+
+class Being
+{
+    // -- ATTRIBUTES
+
+    public string
+        $name;
+    public int
+        $age;
+
+    // -- CONSTRUCTORS
+
+    public function __construct(
+        string $name,
+        int $age
+        )
+    {
+        $this->name = $name;
+        $this->age = $age;
+    }
+}
+
+// ~~
+
+class Person extends Being
+{
+    // -- ATTRIBUTES
+
+    public float
+        $weight,
+        $dogCount;
+
+    // -- CONSTRUCTORS
+
+    public function __construct(
+        string $name,
+        int $age,
+        float $weight,
+        float $dogCount
+        )
+    {
+        parent::__construct( $name, $age );
+        $this->weight = $weight;
+        $this->dogCount = $dogCount;
+    }
+
+    // -- INQUIRIES
+
+    public function getAge(
+        ): int
+    {
+        return $this->age;
+    }
+
+    // ~~
+
+    public function getAgeOffset(
+        int $otherAge
+        ): int
+    {
+        return $otherAge - $this->age;
+    }
+
+    // ~~
+
+    public function getHelloMessage(
+        ): string
+    {
+        return "Hello, my name is {$this->name}, I'm {$this->age} years old and I weight {$this->weight} kilograms.";
+    }
+
+    // -- OPERATIONS
+
+    public function setAge(
+        int $age
+        ): void
+    {
+        $this->age = $age;
+    }
+
+    // ~~
+
+    public function setFakeAge(
+        int $age
+        ): void
+    {
+        if ( $age > 0
+             && $age < 50
+             && ( $age < 20
+                  || $age > 40 ) )
+        {
+            $this->age
+                += ( $age
+                     + ( $age - 2 )
+                     + ( $age
+                         * ( $age + 10 )
+                         * ( $age + 20 ) ) )
+                   + $this->getAgeOffset(
+                        $age * 2
+                        - 20
+                        );
+        }
+        elseif ( $age > 20
+                 && $age < 40
+                 && ( $age < 25
+                      || $age > 35 ) )
+        {
+            $this->age
+                = (int)round(
+                    $age * 0.5
+                    );
+        }
+        else
+        {
+            $this->age = $age + 10;
+        }
+    }
+}
+
+// -- FUNCTIONS
+
+function getAgeInterval(
+    array $sortedPersonArray
+    ): ?AgeInterval
+{
+    if ( count( $sortedPersonArray ) === 0 )
+    {
+        return null;
+    }
+    else
+    {
+        return
+            new AgeInterval(
+                $sortedPersonArray[ 0 ]->age,
+                $sortedPersonArray[ count( $sortedPersonArray ) - 1 ]->age
+                );
+    }
+}
+
+// ~~
+
+function main(
+    ): void
+{
+    $passIndex = 0;
+
+    while ( $passIndex < 5 )
+    {
+        $passIndex += 1;
+    }
+
+    while ( true )
+    {
+        $passIndex += 1;
+
+        if ( $passIndex >= 10 )
+        {
+            break;
+        }
+    }
+
+    $personArray
+        = [
+              new Person( 'Mike', 49, 85.0, 1.0 ),
+              new Person( 'Luke', 30, 77.0, 0.0 ),
+              new Person( 'John', 30, 72.0, 3.0 )
+          ];
+
+    usort(
+        $personArray,
+        function (
+            Person $firstPerson,
+            Person $secondPerson
+            ): int
+        {
+            try
+            {
+                if ( $firstPerson->age !== $secondPerson->age )
+                {
+                    return $firstPerson->age <=> $secondPerson->age;
+                }
+                else
+                {
+                    return $firstPerson->weight <=> $secondPerson->weight;
+                }
+            }
+            catch ( Throwable $error )
+            {
+                print( $error->getMessage() . PHP_EOL );
+            }
+
+            return 0;
+        }
+        );
+
+    $ageInterval = getAgeInterval( $personArray );
+
+    if ( $ageInterval !== null )
+    {
+        print( "First age: {$ageInterval->firstAge}" . PHP_EOL );
+        print( "Last age: {$ageInterval->lastAge}" . PHP_EOL );
+    }
+    else
+    {
+        print( 'No age interval' . PHP_EOL );
+    }
+}
+
+// -- STATEMENTS
 
 main();
 ```

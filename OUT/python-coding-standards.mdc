@@ -1,7 +1,7 @@
 ---
 description: Python coding standards
 globs:
-  - "CODE/**/*.py"
+  - "**/*.py"
 alwaysApply: true
 ---
 # Python Coding Standards

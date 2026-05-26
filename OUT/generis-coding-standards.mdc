@@ -1,16 +1,16 @@
 ---
-description: Go coding standards
+description: Generis coding standards
 globs:
-  - "CODE/**/*.go"
+  - "**/*.gs"
 alwaysApply: true
 ---
-# Go Coding Standards
+# Generis Coding Standards
 
-Every single line of Go source code of this codebase must strictly adhere to the following rules, without any exception. Those rules must be treated as a hard rule system, not stylistic preference.
+Every single line of Generis source code of this codebase must strictly adhere to the following rules, without any exception. Those rules must be treated as a hard rule system, not stylistic preference.
 
 ## Formatting
 
-- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to Go, HTML, CSS and any other code of this project.
+- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to Generis, HTML, CSS and any other code of this project.
 - Prefer explicit and readable code over compact code.
 - Aligned braces (Allman style) and keep the opening and closing braces always alone on their own line.
 - Each function parameter definition must be on its own line with the closing `)` of the parameter list starting its own line.
@@ -108,9 +108,11 @@ Every single line of Go source code of this codebase must strictly adhere to the
 
 - Don't add any legacy data compatibility code to the codebase when some data structures change. As this project is still not deployed in production, the code and data must remain perfecly in sync.
 
-## Go reference sample
+## Generis reference sample
 
 ```go
+package main;
+
 // -- IMPORTS
 
 import (
@@ -141,7 +143,7 @@ type Person struct
 {
     // -- ATTRIBUTES
 
-    Being
+    Being;
     Weight float64;
     DogCount float64;
 }

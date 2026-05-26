@@ -1,7 +1,7 @@
 ---
 description: C# coding standards
 globs:
-  - "CODE/**/*.cs"
+  - "**/*.cs"
 alwaysApply: true
 ---
 # C# Coding Standards

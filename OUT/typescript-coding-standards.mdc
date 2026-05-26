@@ -1,9 +1,9 @@
 ---
 description: TypeScript coding standards
 globs:
-  - "CODE/**/*.ts"
-  - "CODE/**/*.tsx"
-  - "CODE/**/*.scss"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.scss"
 alwaysApply: true
 ---
 # TypeScript Coding Standards
@@ -12,6 +12,7 @@ Every single line of TypeScript source code of this codebase must strictly adher
 
 ## Formatting
 
+- It is forbidden to format the TypeScript code with `prettier`, `biome`, `dprint`, `eslint`, `deno fmt`, etc.
 - Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to TypeScript, HTML, CSS and any other code of this project.
 - Prefer explicit and readable code over compact code.
 - Aligned braces (Allman style) and keep the opening and closing braces always alone on their own line.

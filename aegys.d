@@ -23,7 +23,7 @@
 import core.stdc.stdlib : exit;
 import std.algorithm : countUntil;
 import std.conv : to;
-import std.file : exists, readText, write;
+import std.file : exists, mkdirRecurse, readText, write;
 import std.path : absolutePath;
 import std.stdio : writeln;
 import std.string : indexOf, join, lastIndexOf, replace, split, startsWith, stripRight;
@@ -150,11 +150,36 @@ string GetFileName(
 
 // ~~
 
+void CreateFolder(
+    string folder_path
+    )
+{
+    try
+    {
+        if ( folder_path != ""
+             && folder_path != "/"
+             && !folder_path.exists() )
+        {
+            writeln( "Creating folder : ", folder_path );
+
+            folder_path.GetPhysicalPath().mkdirRecurse();
+        }
+    }
+    catch ( Exception exception )
+    {
+        Abort( "Can't create folder : " ~ folder_path, exception );
+    }
+}
+
+// ~~
+
 void WriteText(
     string file_path,
     string file_text
     )
 {
+    CreateFolder( file_path.GetFolderPath() );
+
     try
     {
         writeln( "Writing file : ", file_path );

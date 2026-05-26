@@ -1,7 +1,7 @@
 ---
 description: Zig coding standards
 globs:
-  - "CODE/**/*.zig"
+  - "**/*.zig"
 alwaysApply: true
 ---
 # Zig Coding Standards
@@ -10,6 +10,7 @@ Every single line of Zig source code of this codebase must strictly adhere to th
 
 ## Formatting
 
+- It is fordidden to format the Zig code with `zig fmt`.
 - Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to Zig, HTML, CSS and any other code of this project.
 - Prefer explicit and readable code over compact code.
 - Aligned braces (Allman style) and keep the opening and closing braces always alone on their own line.

@@ -1,7 +1,7 @@
 ---
 description: Mojo coding standards
 globs:
-  - "CODE/**/*.mojo"
+  - "**/*.mojo"
 alwaysApply: true
 ---
 # Mojo Coding Standards

@@ -1,7 +1,7 @@
 ---
 description: Rust coding standards
 globs:
-  - "CODE/**/*.rs"
+  - "**/*.rs"
 alwaysApply: true
 ---
 # Rust Coding Standards

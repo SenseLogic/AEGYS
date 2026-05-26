@@ -1,16 +1,15 @@
 ---
-description: Dart coding standards
+description: Phoenix coding standards
 globs:
-  - "**/*.dart"
 alwaysApply: true
 ---
-# Dart Coding Standards
+# Phoenix Coding Standards
 
-Every single line of Dart source code of this codebase must strictly adhere to the following rules, without any exception. Those rules must be treated as a hard rule system, not stylistic preference.
+Every single line of Phoenix source code of this codebase must strictly adhere to the following rules, without any exception. Those rules must be treated as a hard rule system, not stylistic preference.
 
 ## Formatting
 
-- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to Dart, HTML, CSS and any other code of this project.
+- Four-space indentation: use exactly four spaces per nesting level; do not use tabs for indentation. This applies to Phoenix, HTML, CSS and any other code of this project.
 - Prefer explicit and readable code over compact code.
 - Aligned braces (Allman style) and keep the opening and closing braces always alone on their own line.
 - Each function parameter definition must be on its own line with the closing `)` of the parameter list starting its own line.
@@ -24,7 +23,6 @@ Every single line of Dart source code of this codebase must strictly adhere to t
 - When an assignment spans multiple lines, the assignment operator (`=`, `+=`, etc) must be indented on the next line and start the first line of the right-hand side value.
 - For non-empty `()` and `[]`, add spaces inside delimiters: `xxxxx( 10, xxxxx[ 10 ] )`. Keep empty pairs compact: `xxxxx()`, `xxxxx[]`.
 - Keep a blank line before and after a multiline call or assignment, unless it is after the opening `{` of a block or before the closing `}` of a block.
-- Keep a blank line before `return`, `if`, `for`, `while`, `for-in`, `switch`, `try`, `catch`, `finally`, and `else` when the previous non-empty line does not end with `{`.
 - No trailing commas in any comma-separated construct.
 
 ## Naming and sections
@@ -49,13 +47,12 @@ Every single line of Dart source code of this codebase must strictly adhere to t
 - Insert a standard separating comment `// ~~` between types, methods or functions defined within the same standard section.
 - Keep an empty line before and after any of those `// -- ...' and `// ~~` standard section and separating comments, unless the standard comment is at the start of a file or `{` block.
 - Try to define the code inside sections following the same order as the above section comments, and within those sections, define constants, types, attributes, methods etc before the other elements of code that are using them (i.e. having the used code defined before the code that uses it, allowing for single-read full code understanding).
-- Use `List` or `Map` suffixes matching the collection type (`ProductList`, `productList`, `ProductByIdMap`, `productByIdMap`).
+- Use `Array` or `Map` suffixes matching the collection type (`ProductArray`, `ProductByIdMap`, `productArray`, `productByIdMap`).
 - Use the `Index` suffix for element indices (`ProductIndex`, `productIndex`).
 - Use the `Count` suffix for element counts (`ProductCount`, `productCount`).
-- Use `PascalCase` for types, annotations, constructors, and type parameters.
-- Use `camelCase` for methods, functions, parameters, locals, fields, and enum values.
-- Use `snake_case` for libraries, packages, directories, source files, and import prefixes.
-- Prefer `let` over `const` even when the variable is not reassigned, using `const` only for true fixed constants defined at class or module level.
+- Use `PascalCase` for namespaces, classes, interfaces, traits, and enums.
+- Use `camelCase` for methods, functions, parameters, local variables, properties, and enum cases.
+- Use `SCREAMING_CASE` for constants.
 
 ## Control flow
 
@@ -106,207 +103,247 @@ Every single line of Dart source code of this codebase must strictly adhere to t
 
 - Don't add any legacy data compatibility code to the codebase when some data structures change. As this project is still not deployed in production, the code and data must remain perfecly in sync.
 
-## Dart reference sample
+## Phoenix reference sample
 
-```dart
-// -- IMPORTS
-
-import 'dart:core';
-
+```php
 // -- CONSTANTS
 
-const int
-    minimumPassCount = 0,
-    maximumPassCount = 5;
+const
+    MINIMUM_PASS_COUNT = 0,
+    MAXIMUM_PASS_COUNT = 5;
 
 // -- TYPES
+
+class AgeInterval
+{
+    // -- ATTRIBUTES
+
+    public int
+        firstAge,
+        lastAge;
+
+    // -- CONSTRUCTORS
+
+    public function constructor(
+        int firstAge,
+        int lastAge
+        )
+    {
+        .firstAge = firstAge;
+        .lastAge = lastAge;
+    }
+}
+
+// ~~
 
 class Being
 {
     // -- ATTRIBUTES
 
-    String
+    public string
         name;
-    int
+    public int
         age;
 
     // -- CONSTRUCTORS
 
-    Being(
-        this.name,
-        this.age
-        );
+    public function constructor(
+        string name,
+        int age
+        )
+    {
+        .name = name;
+        .age = age;
+    }
 }
 
 // ~~
 
-class Person
-    extends Being
+class Person extends Being
 {
     // -- ATTRIBUTES
 
-    double
+    public float
         weight,
         dogCount;
 
     // -- CONSTRUCTORS
 
-    Person(
-        String name,
+    public function constructor(
+        string name,
         int age,
-        this.weight,
-        this.dogCount
-        ):
-        super( name, age );
+        float weight,
+        float dogCount
+        )
+    {
+        parent::constructor( name, age );
+        .weight = weight;
+        .dogCount = dogCount;
+    }
 
     // -- INQUIRIES
 
-    int getAge(
-        )
+    public function getAge(
+        ): int
     {
-        return age;
+        return .age;
     }
 
     // ~~
 
-    int getAgeOffset(
+    public function getAgeOffset(
         int otherAge
-        )
+        ): int
     {
-        return otherAge - age;
+        return otherAge - .age;
     }
 
     // ~~
 
-    String getHelloMessage(
-        )
+    public function getHelloMessage(
+        ): string
     {
-        return 'Hello, my name is ${ name }, I\'m ${ age } years old and I weight ${ weight } kilograms.';
+        return "Hello, my name is {.name}, I'm {.age} years old and I weight {.weight} kilograms.";
     }
 
     // -- OPERATIONS
 
-    void setAge(
+    public function setAge(
         int age
-        )
+        ): void
     {
-        this.age = age;
+        .age = age;
     }
 
     // ~~
 
-    void setFakeAge(
+    public function setFakeAge(
         int age
-        )
+        ): void
     {
         if ( age > 0
              && age < 50
              && ( age < 20
                   || age > 40 ) )
         {
-            this.age
+            .age
                 += ( age
                      + ( age - 2 )
                      + ( age
                          * ( age + 10 )
                          * ( age + 20 ) ) )
-                   + this.getAgeOffset(
-                         age * 2
-                         - 20
-                         );
+                   + .getAgeOffset(
+                        age * 2
+                        - 20
+                        );
         }
-        else if ( age > 20
-                  && age < 40
-                  && ( age < 25
-                       || age > 35 ) )
+        elseif ( age > 20
+                 && age < 40
+                 && ( age < 25
+                      || age > 35 ) )
         {
-            this.age = ( age * 0.5 ).round();
+            .age
+                = (int)round(
+                    age * 0.5
+                    );
         }
         else
         {
-            this.age = age + 10;
+            .age = age + 10;
         }
     }
 }
 
 // -- FUNCTIONS
 
-Map<String, int>? getAgeInterval(
-    List<Person> sortedPersonList
-    )
+function getAgeInterval(
+    array sortedPersonArray
+    ): ?AgeInterval
 {
-    if ( sortedPersonList.isEmpty )
+    if ( count( sortedPersonArray ) === 0 )
     {
         return null;
     }
     else
     {
         return
-            {
-                'firstAge': sortedPersonList[ 0 ].age,
-                'lastAge': sortedPersonList[ sortedPersonList.length - 1 ].age
-            };
+            new AgeInterval(
+                sortedPersonArray[ 0 ].age,
+                sortedPersonArray[ count( sortedPersonArray ) - 1 ].age
+                );
     }
 }
 
 // ~~
 
-void main(
-    )
+function main(
+    ): void
 {
     var passIndex = 0;
 
     while ( passIndex < 5 )
     {
-        ++passIndex;
+        passIndex += 1;
     }
 
-    do
+    while ( true )
     {
-        ++passIndex;
+        passIndex += 1;
+
+        if ( passIndex >= 10 )
+        {
+            break;
+        }
     }
-    while ( passIndex < 10 );
 
-    var personList
+    var personArray
         = [
-            Person( 'Mike', 49, 85, 1 ),
-            Person( 'Luke', 30, 77, 0 ),
-            Person( 'John', 30, 72, 3 )
-        ];
+              new Person( 'Mike', 49, 85.0, 1.0 ),
+              new Person( 'Luke', 30, 77.0, 0.0 ),
+              new Person( 'John', 30, 72.0, 3.0 )
+          ];
 
-    personList.sort(
-        ( firstPerson, secondPerson )
+    usort(
+        personArray,
+        function (
+            Person firstPerson,
+            Person secondPerson
+            ): int
         {
             try
             {
-                if ( firstPerson.age != secondPerson.age )
+                if ( firstPerson.age !== secondPerson.age )
                 {
-                    return firstPerson.age - secondPerson.age;
+                    return firstPerson.age <=> secondPerson.age;
                 }
                 else
                 {
-                    return firstPerson.weight.compareTo( secondPerson.weight );
+                    return firstPerson.weight <=> secondPerson.weight;
                 }
             }
-            catch ( error )
+            catch ( Throwable error )
             {
-                print( error.toString() );
+                print( error.getMessage() . PHP_EOL );
             }
 
             return 0;
         }
         );
 
-    var ageInterval = getAgeInterval( personList );
+    var ageInterval = getAgeInterval( personArray );
 
-    if ( ageInterval != null )
+    if ( ageInterval !== null )
     {
-        print( 'First age: ${ ageInterval[ 'firstAge' ] }' );
-        print( 'Last age: ${ ageInterval[ 'lastAge' ] }' );
+        print( "First age: {ageInterval.firstAge}" . PHP_EOL );
+        print( "Last age: {ageInterval.lastAge}" . PHP_EOL );
     }
     else
     {
-        print( 'No age interval' );
+        print( 'No age interval' . PHP_EOL );
     }
 }
+
+// -- STATEMENTS
+
+main();
 ```
