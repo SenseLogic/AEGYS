@@ -20,7 +20,7 @@ Every single line of Zig source code of this codebase must strictly adhere to th
 - When the field value after `:` spans multiple lines, the `:` must end its own line, and the field value must be indented on the next line(s).
 - When an opening `(` ends its own line, the matching closing `)` must start its own line and be aligned with the first character of the indented argument block.
 - When an opening `[` ends its own line, the matching closing `]` must start its own line and be aligned with the first character of the indented element block.
-- In multiline boolean expressions, put `&&` and `||` at the start of the continued line, aligned with the first character of its first left operand.
+- In multiline boolean expressions, put `and` and `or` at the start of the continued line, aligned with the first character of its first left operand.
 - In multiline arithmetic expressions, put the operator (`+`, etc) at the start of the continued line, aligned with the first character of its first left operand.
 - When an assignment spans multiple lines, the assignment operator (`=`, `+=`, etc) must be indented on the next line and start the first line of the right-hand side value.
 - For non-empty `()` and `[]`, add spaces inside delimiters: `xxxxx( 10, xxxxx[ 10 ] )`. Keep empty pairs compact: `xxxxx()`, `xxxxx[]`.
