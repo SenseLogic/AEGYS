@@ -109,33 +109,28 @@ Every single line of Dart source code of this codebase must strictly adhere to t
 ## Dart reference sample
 
 ```dart
-// -- IMPORTS
-
-import 'dart:core';
-
 // -- CONSTANTS
 
-const int
-    minimumPassCount = 0,
-    maximumPassCount = 5;
+const int minimumPassCount = 0;
+const int maximumPassCount = 5;
 
 // -- TYPES
 
 class Being
 {
-    // -- ATTRIBUTES
-
-    String
-        name;
-    int
-        age;
-
     // -- CONSTRUCTORS
 
     Being(
         this.name,
         this.age
         );
+
+    // -- ATTRIBUTES
+
+    String 
+      name;
+    int 
+      age;
 }
 
 // ~~
@@ -143,21 +138,20 @@ class Being
 class Person
     extends Being
 {
-    // -- ATTRIBUTES
-
-    double
-        weight,
-        dogCount;
-
     // -- CONSTRUCTORS
 
     Person(
-        String name,
-        int age,
+        super.name,
+        super.age,
         this.weight,
         this.dogCount
-        ):
-        super( name, age );
+        );
+
+    // -- ATTRIBUTES
+
+    int 
+      weight,
+      dogCount;
 
     // -- INQUIRIES
 
@@ -181,7 +175,7 @@ class Person
     String getHelloMessage(
         )
     {
-        return 'Hello, my name is ${ name }, I\'m ${ age } years old and I weight ${ weight } kilograms.';
+        return "Hello, my name is $name, I'm $age years old and I weight $weight kilograms.";
     }
 
     // -- OPERATIONS
@@ -210,7 +204,7 @@ class Person
                      + ( age
                          * ( age + 10 )
                          * ( age + 20 ) ) )
-                   + this.getAgeOffset(
+                   + getAgeOffset(
                          age * 2
                          - 20
                          );
@@ -229,23 +223,39 @@ class Person
     }
 }
 
+// ~~
+
+class AgeInterval
+{
+    AgeInterval(
+        {
+            required this.firstAge,
+            required this.lastAge
+        }
+        );
+
+    final int 
+      firstAge,
+      lastAge;
+}
+
 // -- FUNCTIONS
 
-Map<String, int>? getAgeInterval(
-    List<Person> sortedPersonList
+AgeInterval? getAgeInterval(
+    List<Person> sortedPersonArray
     )
 {
-    if ( sortedPersonList.isEmpty )
+    if ( sortedPersonArray.isEmpty )
     {
         return null;
     }
     else
     {
-        return
-            {
-                'firstAge': sortedPersonList[ 0 ].age,
-                'lastAge': sortedPersonList[ sortedPersonList.length - 1 ].age
-            };
+        return 
+            AgeInterval(
+                firstAge: sortedPersonArray.first.age,
+                lastAge: sortedPersonArray.last.age
+                );
     }
 }
 
@@ -256,7 +266,7 @@ void main(
 {
     var passIndex = 0;
 
-    while ( passIndex < 5 )
+    while ( passIndex < maximumPassCount )
     {
         ++passIndex;
     }
@@ -267,14 +277,14 @@ void main(
     }
     while ( passIndex < 10 );
 
-    var personList
-        = [
-            Person( 'Mike', 49, 85, 1 ),
-            Person( 'Luke', 30, 77, 0 ),
-            Person( 'John', 30, 72, 3 )
+    final personArray
+        = <Person>[
+            Person( "Mike", 49, 85, 1 ),
+            Person( "Luke", 30, 77, 0 ),
+            Person( "John", 30, 72, 3 )
         ];
 
-    personList.sort(
+    personArray.sort(
         ( firstPerson, secondPerson )
         {
             try
@@ -285,7 +295,7 @@ void main(
                 }
                 else
                 {
-                    return firstPerson.weight.compareTo( secondPerson.weight );
+                    return firstPerson.weight - secondPerson.weight;
                 }
             }
             catch ( error )
@@ -297,16 +307,16 @@ void main(
         }
         );
 
-    var ageInterval = getAgeInterval( personList );
+    final ageInterval = getAgeInterval( personArray );
 
     if ( ageInterval != null )
     {
-        print( 'First age: ${ ageInterval[ 'firstAge' ] }' );
-        print( 'Last age: ${ ageInterval[ 'lastAge' ] }' );
+        print( "First age: ${ ageInterval.firstAge }" );
+        print( "Last age: ${ ageInterval.lastAge }" );
     }
     else
     {
-        print( 'No age interval' );
+        print( "No age interval" );
     }
 }
 ```

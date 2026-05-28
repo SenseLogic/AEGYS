@@ -115,36 +115,29 @@ const std = @import( "std" );
 
 // -- CONSTANTS
 
-const minimum_pass_count: i32 = 0;
-const maximum_pass_count: i32 = 5;
+const
+    minimumPassCount: i32 = 0,
+    maximumPassCount: i32 = 5;
 
 // -- TYPES
 
-const AgeInterval =
+const Being = 
     struct
     {
-        first_age: i32,
-        last_age: i32,
-    };
-
-// ~~
-
-const Being =
-    struct
-    {
-        // -- ATTRIBUTES
+        // -- PROPERTIES
 
         name: []const u8,
         age: i32,
 
         // -- CONSTRUCTORS
 
-        fn init(
+        pub fn init(
             name: []const u8,
             age: i32
-            ) Being
+            )
+            Being
         {
-            return
+            return 
                 .{
                     .name = name,
                     .age = age,
@@ -154,80 +147,91 @@ const Being =
 
 // ~~
 
-const Person =
+const Person = 
     struct
     {
-        // -- ATTRIBUTES
+        // -- PROPERTIES
 
         being: Being,
-        weight: f64,
-        dog_count: f64,
+        weight: i32,
+        dogCount: i32,
 
         // -- CONSTRUCTORS
 
-        fn init(
+        pub fn init(
             name: []const u8,
             age: i32,
-            weight: f64,
-            dog_count: f64
-            ) Person
+            weight: i32,
+            dogCount: i32
+            )
+            Person
         {
-            return
+            return 
                 .{
                     .being = Being.init( name, age ),
                     .weight = weight,
-                    .dog_count = dog_count,
+                    .dogCount = dogCount,
                 };
         }
 
         // -- INQUIRIES
 
-        fn get_age(
-            self: Person
-            ) i32
+        pub fn getAge(
+            self: *const Person
+            )
+            i32
         {
             return self.being.age;
         }
 
         // ~~
 
-        fn get_age_offset(
-            self: Person,
-            other_age: i32
-            ) i32
+        pub fn getAgeOffset(
+            self: *const Person,
+            otherAge: i32
+            )
+            i32
         {
-            return other_age - self.being.age;
+            return otherAge - self.being.age;
         }
 
         // ~~
 
-        fn get_hello_message(
-            self: Person
-            ) []const u8
+        pub fn getHelloMessage(
+            self: *const Person,
+            allocator: std.mem.Allocator
+            )
+            ![]u8
         {
             return std.fmt.allocPrint(
-                std.heap.page_allocator,
-                "Hello, my name is {s}, I'm {} years old and I weight {} kilograms.",
-                .{ self.being.name, self.being.age, self.weight }
-                ) catch "";
+                allocator,
+                "Hello, my name is {s}, I'm {d} years old and I weight {d} kilograms.",
+                .{
+                    self.being.name,
+                    self.being.age,
+                    self.weight,
+                }
+                );
         }
 
         // -- OPERATIONS
 
-        fn set_age(
+        pub fn setAge(
             self: *Person,
             age: i32
-            ) void
+            )
+            void
         {
             self.being.age = age;
         }
 
         // ~~
 
-        fn set_fake_age(
+        pub fn setFakeAge(
             self: *Person,
             age: i32
-            ) void
+            )
+            void
         {
             if ( age > 0
                  and age < 50
@@ -236,14 +240,14 @@ const Person =
             {
                 self.being.age
                     += ( age
-                        + ( age - 2 )
-                        + ( age
-                            * ( age + 10 )
-                            * ( age + 20 ) ) )
-                        + self.get_age_offset(
-                            age * 2
-                            - 20
-                            );
+                         + ( age - 2 )
+                         + ( age
+                             * ( age + 10 )
+                             * ( age + 20 ) ) )
+                    + self.getAgeOffset(
+                          age * 2
+                          - 20
+                          );
             }
             else if ( age > 20
                       and age < 40
@@ -259,50 +263,81 @@ const Person =
         }
     };
 
+// ~~
+
+const AgeInterval = 
+    struct
+    {
+        firstAge: i32,
+        lastAge: i32,
+    };
+
 // -- FUNCTIONS
 
-fn get_age_interval(
-    sorted_person_array: []const Person
+fn getAgeInterval(
+    sortedPersonArray: []const Person
     ) ?AgeInterval
 {
-    if ( sorted_person_array.len == 0 )
+    if ( sortedPersonArray.len == 0 )
     {
         return null;
     }
     else
     {
-        return
+        return 
             AgeInterval
             {
-                .first_age = sorted_person_array[ 0 ].being.age,
-                .last_age = sorted_person_array[ sorted_person_array.len - 1 ].being.age,
+                .firstAge = sortedPersonArray[ 0 ].being.age,
+                .lastAge = sortedPersonArray[ sortedPersonArray.len - 1 ].being.age,
             };
+    }
+}
+
+// ~~ 
+
+fn getPersonComparison(
+    _: void,
+    firstPerson: Person,
+    secondPerson: Person
+    ) bool
+{
+    if ( firstPerson.being.age != secondPerson.being.age )
+    {
+        return firstPerson.being.age < secondPerson.being.age;
+    }
+    else
+    {
+        return firstPerson.weight < secondPerson.weight;
     }
 }
 
 // ~~
 
-pub fn main(
+fn run(
     ) !void
 {
-    var pass_index: i32 = 0;
+    var passIndex: i32 = 0;
 
-    while ( pass_index < 5 )
+    while ( passIndex < 5 )
     {
-        pass_index += 1;
+        passIndex += 1;
     }
 
     while ( true )
     {
-        pass_index += 1;
+        passIndex += 1;
 
-        if ( pass_index >= 10 )
+        if ( passIndex < 10 )
+        {
+            continue;
+        }
+        else
         {
             break;
         }
     }
 
-    var person_array =
+    var personArray = 
         [_]Person
         {
             Person.init( "Mike", 49, 85, 1 ),
@@ -310,51 +345,34 @@ pub fn main(
             Person.init( "John", 30, 72, 3 ),
         };
 
-    std.mem.sort(
+    std.sort.pdq(
         Person,
-        &person_array,
+        &personArray,
         {},
-        struct
-        {
-            fn lessThan(
-                _context: void,
-                first_person: Person,
-                second_person: Person
-                ) bool
-            {
-                _ = _context;
-
-                if ( first_person.being.age != second_person.being.age )
-                {
-                    return first_person.being.age < second_person.being.age;
-                }
-                else
-                {
-                    return first_person.weight < second_person.weight;
-                }
-            }
-        }.lessThan
+        getPersonComparison
         );
 
-    const age_interval = get_age_interval( &person_array );
+    const ageInterval = getAgeInterval( personArray[ 0.. ] );
 
-    if ( age_interval != null )
+    if ( ageInterval != null )
     {
-        const age_interval_value = age_interval.?;
-
-        std.debug.print(
-            "First age: {}\n",
-            .{ age_interval_value.first_age }
-            );
-
-        std.debug.print(
-            "Last age: {}\n",
-            .{ age_interval_value.last_age }
-            );
+        std.debug.print( "First age: {d}\n", .{ ageInterval.?.firstAge } );
+        std.debug.print( "Last age: {d}\n", .{ ageInterval.?.lastAge } );
     }
     else
     {
         std.debug.print( "No age interval\n", .{} );
     }
+
+    _ = minimumPassCount;
+    _ = maximumPassCount;
+}
+
+// -- STATEMENTS
+
+pub fn main(
+    ) !void
+{
+    try run();
 }
 ```

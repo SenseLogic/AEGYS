@@ -1,0 +1,53 @@
+<?
+    homePageData = applicationData.homePage;
+    headerMenuButtonArray = applicationData.headerMenuButtonArray;
+    languageByCodeMap = applicationData.languageByCodeMap;
+?>
+
+<header class="header-menu">
+    <div class="header-menu-container">
+        <div class="header-menu-logo">
+            <h1 class="header-menu-logo-text">
+                <% getLocalizedText( homePageData.title ) %>
+            </h1>
+        </div>
+
+        <nav class="header-menu-nav">
+            <ul class="header-menu-list">
+                <? foreach ( headerMenuButton; headerMenuButtonArray ) { ?>
+                    <?
+                        route = headerMenuButton.route;
+                        text = headerMenuButton.text;
+                        href = '/' .. languageCode .. '/' .. route );
+                    ?>
+                    <li class="header-menu-item">
+                        <a href="<% href %>" class="header-menu-button">
+                            <span class="header-menu-button-text">
+                                <% getLocalizedText( text ) %>
+                            </span>
+                        </a>
+                    </li>
+                <? } ?>
+            </ul>
+        </nav>
+
+        <div class="header-menu-language">
+            <select
+                class="header-menu-language-select"
+                onchange="window.location.href=this.value"
+            >
+                <? foreach ( var code => var language; languageByCodeMap ): ?>
+                    <?
+                        languageCodePath = getLanguageCodePath( getRequestPath(), languageCode, code );
+                    ?>
+                    <option
+                        value="<% languageCodePath %>"
+                        <?= code === languageCode ? 'selected' : '' ?>
+                    >
+                        <% getLocalizedText( language.name ) %>
+                    </option>
+                <? } ?>
+            </select>
+        </div>
+    </div>
+</header>

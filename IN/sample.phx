@@ -1,0 +1,240 @@
+// -- CONSTANTS
+
+const
+    MINIMUM_PASS_COUNT = 0,
+    MAXIMUM_PASS_COUNT = 5;
+
+// -- TYPES
+
+class AgeInterval
+{
+    // -- ATTRIBUTES
+
+    public int
+        firstAge,
+        lastAge;
+
+    // -- CONSTRUCTORS
+
+    public function constructor(
+        int firstAge,
+        int lastAge
+        )
+    {
+        .firstAge = firstAge;
+        .lastAge = lastAge;
+    }
+}
+
+// ~~
+
+class Being
+{
+    // -- ATTRIBUTES
+
+    public string
+        name;
+    public int
+        age;
+
+    // -- CONSTRUCTORS
+
+    public function constructor(
+        string name,
+        int age
+        )
+    {
+        .name = name;
+        .age = age;
+    }
+}
+
+// ~~
+
+class Person extends Being
+{
+    // -- ATTRIBUTES
+
+    public float
+        weight,
+        dogCount;
+
+    // -- CONSTRUCTORS
+
+    public function constructor(
+        string name,
+        int age,
+        float weight,
+        float dogCount
+        )
+    {
+        parent::constructor( name, age );
+        .weight = weight;
+        .dogCount = dogCount;
+    }
+
+    // -- INQUIRIES
+
+    public function getAge(
+        ): int
+    {
+        return .age;
+    }
+
+    // ~~
+
+    public function getAgeOffset(
+        int otherAge
+        ): int
+    {
+        return otherAge - .age;
+    }
+
+    // ~~
+
+    public function getHelloMessage(
+        ): string
+    {
+        return "Hello, my name is {.name}, I'm {.age} years old and I weight {.weight} kilograms.";
+    }
+
+    // -- OPERATIONS
+
+    public function setAge(
+        int age
+        ): void
+    {
+        .age = age;
+    }
+
+    // ~~
+
+    public function setFakeAge(
+        int age
+        ): void
+    {
+        if ( age > 0
+             && age < 50
+             && ( age < 20
+                  || age > 40 ) )
+        {
+            .age
+                += ( age
+                     + ( age - 2 )
+                     + ( age
+                         * ( age + 10 )
+                         * ( age + 20 ) ) )
+                   + .getAgeOffset(
+                        age * 2
+                        - 20
+                        );
+        }
+        elseif ( age > 20
+                 && age < 40
+                 && ( age < 25
+                      || age > 35 ) )
+        {
+            .age
+                = (int)round(
+                    age * 0.5
+                    );
+        }
+        else
+        {
+            .age = age + 10;
+        }
+    }
+}
+
+// -- FUNCTIONS
+
+function getAgeInterval(
+    array sortedPersonArray
+    ): ?AgeInterval
+{
+    if ( count( sortedPersonArray ) === 0 )
+    {
+        return null;
+    }
+    else
+    {
+        return
+            new AgeInterval(
+                sortedPersonArray[ 0 ].age,
+                sortedPersonArray[ count( sortedPersonArray ) - 1 ].age
+                );
+    }
+}
+
+// ~~
+
+function main(
+    ): void
+{
+    var passIndex = 0;
+
+    while ( passIndex < 5 )
+    {
+        passIndex += 1;
+    }
+
+    while ( true )
+    {
+        passIndex += 1;
+
+        if ( passIndex >= 10 )
+        {
+            break;
+        }
+    }
+
+    var personArray
+        = [
+              new Person( 'Mike', 49, 85.0, 1.0 ),
+              new Person( 'Luke', 30, 77.0, 0.0 ),
+              new Person( 'John', 30, 72.0, 3.0 )
+          ];
+
+    usort(
+        personArray,
+        function (
+            Person firstPerson,
+            Person secondPerson
+            ): int
+        {
+            try
+            {
+                if ( firstPerson.age !== secondPerson.age )
+                {
+                    return firstPerson.age <=> secondPerson.age;
+                }
+                else
+                {
+                    return firstPerson.weight <=> secondPerson.weight;
+                }
+            }
+            catch ( Throwable error )
+            {
+                print( error.getMessage() . PHP_EOL );
+            }
+
+            return 0;
+        }
+        );
+
+    var ageInterval = getAgeInterval( personArray );
+
+    if ( ageInterval !== null )
+    {
+        print( "First age: {ageInterval.firstAge}" . PHP_EOL );
+        print( "Last age: {ageInterval.lastAge}" . PHP_EOL );
+    }
+    else
+    {
+        print( 'No age interval' . PHP_EOL );
+    }
+}
+
+// -- STATEMENTS
+
+main();

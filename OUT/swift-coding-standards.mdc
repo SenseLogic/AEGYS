@@ -110,20 +110,17 @@ Every single line of Swift source code of this codebase must strictly adhere to 
 ## Swift reference sample
 
 ```swift
-// -- IMPORTS
-
-import Foundation
-
 // -- CONSTANTS
 
-let minimumPassCount: Int = 0;
-let maximumPassCount: Int = 5;
+let
+    minimumPassCount = 0,
+    maximumPassCount = 5;
 
 // -- TYPES
 
 class Being
 {
-    // -- ATTRIBUTES
+    // -- PROPERTIES
 
     var name: String;
     var age: Int;
@@ -131,8 +128,8 @@ class Being
     // -- CONSTRUCTORS
 
     init(
-        name: String,
-        age: Int
+        _ name: String,
+        _ age: Int
         )
     {
         self.name = name;
@@ -142,28 +139,26 @@ class Being
 
 // ~~
 
-class Person: Being
+final class Person
+    : Being
 {
-    // -- ATTRIBUTES
+    // -- PROPERTIES
 
-    var weight: Double;
-    var dogCount: Double;
+    var weight: Int;
+    var dogCount: Int;
 
     // -- CONSTRUCTORS
 
     init(
-        name: String,
-        age: Int,
-        weight: Double,
-        dogCount: Double
+        _ name: String,
+        _ age: Int,
+        _ weight: Int,
+        _ dogCount: Int
         )
     {
-        super.init(
-            name: name,
-            age: age
-            );
         self.weight = weight;
         self.dogCount = dogCount;
+        super.init( name, age );
     }
 
     // -- INQUIRIES
@@ -171,30 +166,31 @@ class Person: Being
     func getAge(
         ) -> Int
     {
-        return age;
+        return self.age;
     }
 
     // ~~
 
     func getAgeOffset(
-        otherAge: Int
+        _ otherAge: Int
         ) -> Int
     {
-        return otherAge - age;
+        return otherAge - self.age;
     }
 
     // ~~
 
     func getHelloMessage(
-        ) -> String
+        )
+        -> String
     {
-        return "Hello, my name is \( name ), I'm \( age ) years old and I weight \( weight ) kilograms.";
+        return "Hello, my name is \( self.name ), I'm \( self.age ) years old and I weight \( self.weight ) kilograms.";
     }
 
     // -- OPERATIONS
 
     func setAge(
-        age: Int
+        _ age: Int
         )
     {
         self.age = age;
@@ -203,7 +199,7 @@ class Person: Being
     // ~~
 
     func setFakeAge(
-        age: Int
+        _ age: Int
         )
     {
         if ( age > 0
@@ -227,7 +223,7 @@ class Person: Being
                   && ( age < 25
                        || age > 35 ) )
         {
-            self.age = Int( Double( age ) * 0.5 );
+            self.age = Int( ( Double( age ) * 0.5 ).rounded() );
         }
         else
         {
@@ -238,9 +234,18 @@ class Person: Being
 
 // -- FUNCTIONS
 
+struct AgeInterval
+{
+    let firstAge: Int;
+    let lastAge: Int;
+}
+
+// ~~
+
 func getAgeInterval(
-    sortedPersonArray: [Person]
-    ) -> [String: Int]?
+    _ sortedPersonArray: [ Person ]
+    )
+    -> AgeInterval?
 {
     if ( sortedPersonArray.isEmpty )
     {
@@ -248,11 +253,10 @@ func getAgeInterval(
     }
     else
     {
-        return
-            [
-                "firstAge": sortedPersonArray[ 0 ].age,
-                "lastAge": sortedPersonArray[ sortedPersonArray.count - 1 ].age
-            ];
+        return AgeInterval(
+            firstAge: sortedPersonArray[ 0 ].age,
+            lastAge: sortedPersonArray[ sortedPersonArray.count - 1 ].age
+            );
     }
 }
 
@@ -275,49 +279,28 @@ func main(
     while ( passIndex < 10 );
 
     var personArray
+        : [ Person ]
         = [
-            Person(
-                name: "Mike",
-                age: 49,
-                weight: 85,
-                dogCount: 1
-                ),
-            Person(
-                name: "Luke",
-                age: 30,
-                weight: 77,
-                dogCount: 0
-                ),
-            Person(
-                name: "John",
-                age: 30,
-                weight: 72,
-                dogCount: 3
-                )
+            Person( "Mike", 49, 85, 1 ),
+            Person( "Luke", 30, 77, 0 ),
+            Person( "John", 30, 72, 3 )
         ];
 
     personArray.sort(
+        by:
         {
             firstPerson,
-            secondPerson in
+            secondPerson
+            in
 
-            do
+            if ( firstPerson.age != secondPerson.age )
             {
-                if ( firstPerson.age != secondPerson.age )
-                {
-                    return firstPerson.age < secondPerson.age;
-                }
-                else
-                {
-                    return firstPerson.weight < secondPerson.weight;
-                }
+                return firstPerson.age < secondPerson.age;
             }
-            catch let error
+            else
             {
-                print( error );
+                return firstPerson.weight < secondPerson.weight;
             }
-
-            return false;
         }
         );
 
@@ -325,8 +308,8 @@ func main(
 
     if ( ageInterval != nil )
     {
-        print( "First age: \( ageInterval![ "firstAge" ]! )" );
-        print( "Last age: \( ageInterval![ "lastAge" ]! )" );
+        print( "First age: \( ageInterval!.firstAge )" );
+        print( "Last age: \( ageInterval!.lastAge )" );
     }
     else
     {

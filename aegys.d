@@ -26,7 +26,7 @@ import std.conv : to;
 import std.file : exists, mkdirRecurse, readText, write;
 import std.path : absolutePath;
 import std.stdio : writeln;
-import std.string : indexOf, join, lastIndexOf, replace, split, startsWith, stripRight;
+import std.string : endsWith, indexOf, join, lastIndexOf, replace, split, startsWith, stripRight;
 
 // -- FUNCTIONS
 
@@ -465,6 +465,12 @@ string GetProcessedFileText(
                               source_line[ 3 .. $ ].ReplaceVariables( variable_value_by_name_map ).GetLogicalPath()
                               );
                     included_text = included_file_path.ReadText();
+                    
+                    if ( included_text.endsWith( '\n' ) )
+                    {
+                        included_text = included_text[ 0 .. $ - 1 ];
+                    }
+                    
                     included_line_array = included_text.replace( "\r", "" ).split( '\n' );
 
                     source_line_array
