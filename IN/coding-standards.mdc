@@ -311,6 +311,7 @@ Every single line of {language} source code of this codebase must strictly adher
 
 %%% framework=Fresh
 - Use Preact Signals (`@preact/signals`) for application state management.
+- All data required by components and islands must be passed through their `data` prop to ensure they work correctly in both SSR and CSR environments.
 %%%
 %% styling_language
 
