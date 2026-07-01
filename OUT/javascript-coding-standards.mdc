@@ -110,9 +110,10 @@ Every single line of JavaScript source code of this codebase must strictly adher
 
 - Don't add any legacy data compatibility code to the codebase when some data structures change. As this project is still not deployed in production, the code and data must remain perfecly in sync.
 
-## State management
+## TSX State management
 
 - Use Preact Signals (`@preact/signals`) for application state management.
+- All data required by components and islands must be passed through their `data` prop to ensure they work correctly in both SSR and CSR environments.
 
 ## Styling Conventions
 

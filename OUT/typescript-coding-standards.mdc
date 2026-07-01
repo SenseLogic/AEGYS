@@ -3,7 +3,9 @@ description: TypeScript coding standards
 globs:
   - "**/*.ts"
   - "**/*.tsx"
+  - "**/*.svelte"
   - "**/*.scss"
+  - "**/*.stylus"
 alwaysApply: true
 ---
 # TypeScript Coding Standards
@@ -110,16 +112,18 @@ Every single line of TypeScript source code of this codebase must strictly adher
 
 - Don't add any legacy data compatibility code to the codebase when some data structures change. As this project is still not deployed in production, the code and data must remain perfecly in sync.
 
-## State management
+## TSX State management
 
 - Use Preact Signals (`@preact/signals`) for application state management.
+- All data required by components and islands must be passed through their `data` prop to ensure they work correctly in both SSR and CSR environments.
 
 ## Styling Conventions
 
 - Do not introduce Tailwind CSS or utility-class frameworks.
-- Only use semantic CSS defined in global or shared SCSS files.
+- Only use semantic CSS defined in global or shared SCSS/Stylus files.
 - CSS classes specific to a component or island must be prefixed with the component name in `slug-case`
   (`HeaderMenu.tsx` => `.header-menu`, `.header-menu-button`, `.header-menu-button-text`).
+  (`HeaderMenu.svelte` => `.header-menu`, `.header-menu-button`, `.header-menu-button-text`).
 - Use unitless values for line heights.
 - Use rem values for font sizes and all other static sizes (only multiples of 0.1rem or 0.25rem).
 - Use px values only for tiny static sizes (i.e. 1px or 2px).
@@ -426,4 +430,84 @@ export default function HeaderMenu(
         </header>
         );
 }
+```
+
+## Svelte reference sample
+
+```svelte
+<script>
+    // -- IMPORTS
+
+    import { onMount } from "svelte";
+    import { getApplicationData, getLanguageCodePath, getLocalizedText } from "../application.ts";
+
+    // -- VARIABLES
+
+    export let languageCode;
+
+    let applicationData = getApplicationData();
+    let homePageData = applicationData.homePage;
+    let path = "/";
+
+    // -- STATEMENTS
+    
+    onMount(
+        () =>
+        {
+            path = window?.location?.pathname ?? "/";
+        }
+        );
+
+    // -- FUNCTIONS
+
+    function handleLanguageChange( event )
+    {
+        window.location.href
+            = getLanguageCodePath(
+                path,
+                event.target.value
+                );
+    }
+</script>
+
+<header class="header-menu">
+    <div class="header-menu-container">
+        <div class="header-menu-logo">
+            <h1 class="header-menu-logo-text">
+                { getLocalizedText( homePageData.title ) }
+            </h1>
+        </div>
+
+        <nav class="header-menu-nav">
+            <ul class="header-menu-list">
+                {#each applicationData.headerMenuButtonArray as menuButtonItem, buttonIndex}
+                    <li class="header-menu-item">
+                        <a
+                            href={ `/${ languageCode }/${ menuButtonItem.route }` }
+                            class="header-menu-button"
+                        >
+                            <span class="header-menu-button-text">
+                                { getLocalizedText( menuButtonItem.text ) }
+                            </span>
+                        </a>
+                    </li>
+                {/each}
+            </ul>
+        </nav>
+
+        <div class="header-menu-language">
+            <select
+                class="header-menu-language-select"
+                value={ languageCode }
+                on:change={ handleLanguageChange }
+            >
+                {#each Object.entries( applicationData.languageByCodeMap ) as [ code, languageItem ]}
+                    <option value={ code }>
+                        { getLocalizedText( languageItem.name ) }
+                    </option>
+                {/each}
+            </select>
+        </div>
+    </div>
+</header>
 ```

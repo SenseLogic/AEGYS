@@ -223,6 +223,7 @@ bool GetVariableExpressionValue(
     )
 {
     string
+        operator,
         variable_name,
         variable_value;
     string*
@@ -233,6 +234,14 @@ bool GetVariableExpressionValue(
     part_array = expression.SplitOnce( '=' );
 
     variable_name = part_array[ 0 ];
+
+    if ( variable_name.endsWith( '!' )
+         || variable_name.endsWith( '/' ) )
+    {
+        operator = variable_name[ $ - 1 .. $ ] ~ '=';
+        variable_name = variable_name[ 0 .. $ - 1 ];
+    }
+
     variable_value = ( part_array.length == 2 ) ? part_array[ 1 ] : "";
     variable_value_by_name = variable_name in variable_value_by_name_map;
 
@@ -245,6 +254,14 @@ bool GetVariableExpressionValue(
         if ( variable_value_by_name is null )
         {
             return false;
+        }
+        else if ( operator == "/=" )
+        {
+            return ( *variable_value_by_name ).indexOf( variable_value.ReplaceVariables( variable_value_by_name_map ) ) >= 0;
+        }
+        else if ( operator == "!=" )
+        {
+            return *variable_value_by_name != variable_value.ReplaceVariables( variable_value_by_name_map );
         }
         else
         {
@@ -465,12 +482,12 @@ string GetProcessedFileText(
                               source_line[ 3 .. $ ].ReplaceVariables( variable_value_by_name_map ).GetLogicalPath()
                               );
                     included_text = included_file_path.ReadText();
-                    
+
                     if ( included_text.endsWith( '\n' ) )
                     {
                         included_text = included_text[ 0 .. $ - 1 ];
                     }
-                    
+
                     included_line_array = included_text.replace( "\r", "" ).split( '\n' );
 
                     source_line_array
