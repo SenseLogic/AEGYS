@@ -38,6 +38,8 @@ globs:
   - "{code_folder}**/*.tsx"
 %%% language=Zig
   - "{code_folder}**/*.zig"
+%%% framework/=Marko
+  - "{code_folder}**/*.marko"
 %%% framework/=Svelte
   - "{code_folder}**/*.svelte"
 %%% styling_language/=SCSS
