@@ -11,6 +11,7 @@ aegys IN/coding-standards.mdc "format=Cursor language=Python greenfield" OUT/pyt
 aegys IN/coding-standards.mdc "format=Cursor language=Rust greenfield" OUT/rust-coding-standards.mdc
 aegys IN/coding-standards.mdc "format=Cursor language=Swift greenfield" OUT/swift-coding-standards.mdc
 aegys IN/coding-standards.mdc "format=Cursor language=TypeScript styling_language=SCSS framework=Fresh greenfield" OUT/typescript-fresh-coding-standards.mdc
+aegys IN/coding-standards.mdc "format=Cursor language=TypeScript styling_language=Stylus framework=Marko greenfield" OUT/typescript-marko-coding-standards.mdc
 aegys IN/coding-standards.mdc "format=Cursor language=TypeScript styling_language=Stylus framework=Svelte greenfield" OUT/typescript-svelte-coding-standards.mdc
 aegys IN/coding-standards.mdc "format=Cursor language=TypeScript styling_language=SCSS/Stylus framework=Fresh/Svelte greenfield" OUT/typescript-coding-standards.mdc
 aegys IN/coding-standards.mdc "format=Cursor language=Zig greenfield" OUT/zig-coding-standards.mdc

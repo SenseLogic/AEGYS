@@ -425,6 +425,13 @@ Every single line of {language} source code of this codebase must strictly adher
 ```zig
 %@ sample.zig
 ```
+%% framework/=Marko
+
+## Marko reference sample
+
+```html
+%@ ui_sample.marko
+```
 %% framework/=Svelte
 
 ## Svelte reference sample

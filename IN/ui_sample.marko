@@ -1,0 +1,56 @@
+import { getApplicationData, getLanguageCodePath, getLocalizedText } from "../application.ts";
+
+<const/{ languageCode }=input>
+<const/applicationData=getApplicationData()>
+<const/homePageData=applicationData.homePage>
+
+<const/handleLanguageChange=
+    ( event ) =>
+    {
+        window.location.href
+            = getLanguageCodePath(
+                  window.location.pathname ?? "/",
+                  event.target.value
+                  );
+    }
+>
+
+<header class="header-menu">
+    <div class="header-menu-container">
+        <div class="header-menu-logo">
+            <h1 class="header-menu-logo-text">
+                ${ getLocalizedText( homePageData.title ) }
+            </h1>
+        </div>
+
+        <nav class="header-menu-nav">
+            <ul class="header-menu-list">
+                <for|menuButtonItem| of=applicationData.headerMenuButtonArray>
+                    <li class="header-menu-item">
+                        <a
+                            href=`/${ languageCode }/${ menuButtonItem.route }`
+                            class="header-menu-button"
+                        >
+                            <span class="header-menu-button-text">
+                                ${ getLocalizedText( menuButtonItem.text ) }
+                            </span>
+                        </a>
+                    </li>
+                </for>
+            </ul>
+        </nav>
+
+        <div class="header-menu-language">
+            <select
+                class="header-menu-language-select"
+                onChange=handleLanguageChange
+            >
+                <for|code, languageItem| in=applicationData.languageByCodeMap>
+                    <option value=code selected=( code === languageCode )>
+                        ${ getLocalizedText( languageItem.name ) }
+                    </option>
+                </for>
+            </select>
+        </div>
+    </div>
+</header>
